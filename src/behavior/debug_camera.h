@@ -19,7 +19,8 @@ void debug_camera_init(void){
 }
 
 void debug_camera_update(double delta_time){
-    vec3 move_input = {INPUT.RIGHT - INPUT.LEFT, 0.0f, INPUT.UP - INPUT.DOWN};
+//    vec3 move_input = {INPUT.RIGHT - INPUT.LEFT, 0.0f, INPUT.UP - INPUT.DOWN};
+    vec3 move_input = {0};
     glm_vec3_scale(move_input, camera_speed * (float)delta_time, move_input);
     glm_translate(debug_camera.transform, move_input);
 }

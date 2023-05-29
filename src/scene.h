@@ -9,6 +9,9 @@
 #include <stdint.h>
 #include "cglm/cglm.h"
 
+struct Model;
+struct Material;
+
 typedef struct Node {
   size_t *children;
   size_t child_count;
@@ -16,13 +19,14 @@ typedef struct Node {
   uint32_t id;
   mat4 transform;
   mat4 normal_matrix;
-  uint32_t mesh_index;
-  uint32_t shader_index;
+
+  struct Model *model;
+  struct Material *material;
 } Node;
 
 typedef struct Scene {
-    uint32_t *root_node_indices;
-    size_t root_node_count;
+    Node *nodes;
+    size_t node_count;
 } Scene;
 
 void scene_delete(Scene *scene);

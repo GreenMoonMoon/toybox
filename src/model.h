@@ -6,24 +6,29 @@
 #define SUPERMARIO_MODEL_H
 
 #include <stdbool.h>
-
-#include "types/mesh.h"
-#include "material.h"
 #include "cglm/cglm.h"
 
 struct ListNode;
+struct Material;
+
+typedef struct Mesh {
+  uint32_t vao;
+  uint32_t mode;
+  int32_t index_count;
+} Mesh;
 
 typedef struct Model {
     uint32_t gpu_handle;
 
     struct ListNode *node;
-    struct Mesh mesh;
     mat4 transform;
     mat4 model_view_matrix;
     mat4 normal_matrix;
     bool scaled;
 
-    Shader shader;
+    Mesh *meshes;
+    int32_t mesh_count;
+    struct Material *material;
 } Model;
 
 struct ListNode *model_node_pool;

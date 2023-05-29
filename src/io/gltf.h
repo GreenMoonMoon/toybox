@@ -5,6 +5,8 @@
 #ifndef SUPERMARIO_GLTF_H
 #define SUPERMARIO_GLTF_H
 
+#include <stdbool.h>
+
 struct Model;
 struct Mesh;
 struct cgltf_data;

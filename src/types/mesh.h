@@ -38,11 +38,4 @@ typedef struct Primitive {
     int32_t index_count;
 } Primitive;
 
-typedef struct Mesh {
-    size_t primitive_count;
-    struct Primitive *primitives;
-} Mesh;
-
-void free_meshes(Mesh *meshes, size_t count);
-
 #endif //SUPERMARIO_MESH_H

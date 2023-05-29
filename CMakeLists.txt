@@ -32,21 +32,10 @@ target_sources(toybox PRIVATE
         main.c
         src/viewport.c
         src/draw.c
-        src/io/file.c
-        src/io/glsl.c
-        src/io/gltf.c
         src/gpu.c
-        src/scene/inputs.c
-        src/scene/render.c
-        src/types/mesh.c
-        src/model.c
-        src/camera.c
-        src/scene.c
-        src/material.c
-        src/types/simple_string.c
         ${extern_SOURCES})
 target_include_directories(toybox PRIVATE src)
-target_link_libraries(toybox PRIVATE SDL2 SDL2main)
+target_link_libraries(toybox PRIVATE SDL2::SDL2main SDL2::SDL2-static)
 
 add_custom_command(TARGET toybox
-        POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_SOURCE_DIR}/assets/ $<TARGET_FILE:toybox>/assets/)
+        POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_SOURCE_DIR}/assets/ $<TARGET_FILE_DIR:toybox>/assets/)
