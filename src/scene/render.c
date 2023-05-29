@@ -47,11 +47,11 @@ void draw_mesh(Mesh mesh) {
 }
 
 void draw_node(Node node, Camera camera, Mesh *meshes, Shader *shaders){
-    use_shader(shaders[node.shader_index]);
+    shader_use(shaders[node.shader_index]);
 
-    set_shader_mvp(shaders[node.shader_index], node.transform, camera.transform, camera.projection);
-    set_shader_light(shaders[node.shader_index], (vec3) {0.0f, 0.0f, -5.0f}, (vec3) {2.0f}, (vec3) {0.8f});
-    set_shader_normal_matrix(shaders[node.shader_index], node.normal_matrix);
+    material_set_mvp(shaders[node.shader_index], node.transform, camera.transform, camera.projection);
+    material_set_light(shaders[node.shader_index], (vec3) {0.0f, 0.0f, -5.0f}, (vec3) {2.0f}, (vec3) {0.8f});
+    material_set_normal_matrix(shaders[node.shader_index], node.normal_matrix);
 
     draw_mesh(meshes[node.mesh_index]);
 }

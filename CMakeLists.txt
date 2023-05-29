@@ -47,3 +47,6 @@ target_sources(toybox PRIVATE
         ${extern_SOURCES})
 target_include_directories(toybox PRIVATE src)
 target_link_libraries(toybox PRIVATE SDL2 SDL2main)
+
+add_custom_command(TARGET toybox
+        POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_SOURCE_DIR}/assets/ $<TARGET_FILE:toybox>/assets/)

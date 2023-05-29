@@ -8,5 +8,6 @@
 #include <stdlib.h>
 
 #define MALLOC malloc
+#define CALLOC calloc
 
 #endif //TOYBOX_SRC_MEMORY_H_

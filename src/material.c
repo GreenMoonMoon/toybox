@@ -3,47 +3,42 @@
 //
 #include "material.h"
 #include <stdarg.h>
+#include "memory.h"
 
 void validate_shader(GLuint handle) {
     GLint success = 0;
-    char info_log[512];
     glGetShaderiv(handle, GL_COMPILE_STATUS, &success);
+    GLint log_length = 0;
+    glGetShaderiv(handle, GL_INFO_LOG_LENGTH, &log_length);
+
+    char *log = MALLOC(sizeof(char) * log_length);
     if (!success) {
-        glGetShaderInfoLog(handle, 512, NULL, info_log);
-        fprintf(stderr, "%s", info_log);
+        glGetShaderInfoLog(handle, log_length, NULL, log);
+        fprintf(stderr, "ERROR GLSL Shader: %s", log);
     }
+    free(log);
 }
 
 void validate_program(GLuint handle) {
     GLint success = 0;
-    char info_log[512];
     glGetProgramiv(handle, GL_LINK_STATUS, &success);
+    GLint log_length = 0;
+    glGetProgramiv(handle, GL_INFO_LOG_LENGTH, &log_length);
+
+    char *log = MALLOC(sizeof(char) * log_length);
     if (!success) {
-        glGetProgramInfoLog(handle, 512, NULL, info_log);
-        fprintf(stderr, "%s", info_log);
+        glGetProgramInfoLog(handle, log_length, NULL, log);
+        fprintf(stderr, "ERROR GLSL Program: %s", log);
     }
+    free(log);
 }
 
-GLuint compile_vertex_shader(const char *source) {
-    GLuint shader = glCreateShader(GL_VERTEX_SHADER);
+GLuint compile_shader(const char *source, GLenum shader_type) {
+    GLuint shader = glCreateShader(shader_type);
     glShaderSource(shader, 1, &source, NULL);
     glCompileShader(shader);
 
-#ifdef DEBUG_BUILD
     validate_shader(shader);
-#endif
-
-    return shader;
-}
-
-GLuint compile_fragment_shader(const char *source) {
-    GLuint shader = glCreateShader(GL_FRAGMENT_SHADER);
-    glShaderSource(shader, 1, &source, NULL);
-    glCompileShader(shader);
-
-#ifdef DEBUG_BUILD
-    validate_shader(shader);
-#endif
 
     return shader;
 }
@@ -72,14 +67,12 @@ GLuint build_program(int count, ...) {
     }
             va_end(arg_list);
 
-#ifdef DEBUG_BUILD
     validate_program(program);
-#endif
 
     return program;
 }
 
-Shader setup_shader(GLuint program_handle) {
+Shader shader_setup(uint32_t program_handle) {
     return (Shader) {
             .handle = program_handle,
             .view_loc = glGetUniformLocation(program_handle, "view"),
@@ -93,36 +86,36 @@ Shader setup_shader(GLuint program_handle) {
     };
 }
 
-Shader load_shader_from_files(const char *vertex_source, const char *fragment_source) {
-    GLuint vertex_handle = compile_vertex_shader(vertex_source);
-    GLuint fragment_handle = compile_fragment_shader(fragment_source);
+Shader shader_load_from_files(const char *vertex_source, const char *fragment_source) {
+    GLuint vertex_handle = compile_shader(vertex_source, GL_VERTEX_SHADER);
+    GLuint fragment_handle = compile_shader(fragment_source, GL_FRAGMENT_SHADER);
     GLuint program_handle = build_program(2, vertex_handle, fragment_handle);
 
-    return setup_shader(program_handle);
+    return shader_setup(program_handle);
 }
 
-void use_shader(Shader shader) {
-    glUseProgram(shader.handle);
+void material_set_in_use(Material *material) {
+    glUseProgram(material->shader.handle);
 }
 
-void set_shader_mvp(Shader shader, mat4 model, mat4 view, mat4 projection) {
-    glUniformMatrix4fv(shader.view_loc, 1, GL_FALSE, (float *) view);
+void material_set_mvp(Shader shader, mat4 view, mat4 model_view, mat4 projection) {
+    glUniformMatrix4fv(shader.view_loc, 1, GL_FALSE, (float *) model_view);
     glUniformMatrix4fv(shader.projection_loc, 1, GL_FALSE, (float *) projection);
 
     mat4 mvp;
-    glm_mat4_mul(view, model, mvp);
+    glm_mat4_mul(model_view, view, mvp);
     glUniformMatrix4fv(shader.model_view_loc, 1, GL_FALSE, (float *) mvp);
 
     glm_mat4_mul(projection, mvp, mvp);
     glUniformMatrix4fv(shader.mvp_loc, 1, GL_FALSE, (float *) mvp);
 }
 
-void set_shader_light(Shader shader, vec3 position, vec3 intensity, vec3 reflectivity) {
+void material_set_light(Shader shader, vec3 position, vec3 intensity, vec3 reflectivity) {
     glUniform3fv(shader.light_source_loc, 1, position);
     glUniform3fv(shader.light_intensity_loc, 1, intensity);
     glUniform3fv(shader.diffuse_reflectivity_loc, 1, reflectivity);
 }
 
-void set_shader_normal_matrix(Shader shader, mat4 normal_matrix){
+void material_set_normal_matrix(Shader shader, mat4 normal_matrix){
     glUniformMatrix4fv(shader.normal_loc, 1, GL_FALSE, (float *) normal_matrix);
 }

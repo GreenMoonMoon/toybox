@@ -9,28 +9,31 @@
 #include "cglm/cglm.h"
 #include "io/gltf.h"
 
+Scene scene;
+
 Camera *main_camera;
+Viewport *viewport;
+Model *models;
 
 int main() {
-    Viewport *viewport;
     viewport_init(800, 600, "Main", &viewport);
 
     //load resources
-    Model *models;
-    size_t model_count = gltf_load_models("C:\\Users\\josue\\Projects\\supermario64\\assets\\models\\generics.glb", &models);
+    size_t model_count = gltf_load_models("assets/models/generics.glb", &models);
     for(size_t i = 0; i < model_count; i++) {
         gpu_load_static_model(&models[i]);
     }
 
-    Shader basic_shader = load_shader_from_files("C:/Users/josue/Projects/supermario64/assets/shaders/basic.vert",
-                                                 "C:/Users/josue/Projects/supermario64/assets/shaders/basic.frag");
+    Shader basic_shader = shader_load_from_files("assets/shaders/basic.vert",
+                                                 "assets/shaders/basic.frag");
     Material basic_material = {
-        .shader = shader,
+        .shader = basic_shader,
     };
 
+    // Setup scene
     uint32_t id = 0;
-    Node *nodes = malloc(mesh_count * sizeof(Mesh));
-    for (int i = 0; i < mesh_count; ++i) {
+    Node *nodes = malloc(model_count * sizeof(Mesh));
+    for (int i = 0; i < model_count; ++i) {
         nodes[i].child_count = 0;
         nodes[i].children = NULL;
         nodes[i].id = id++;
@@ -38,6 +41,7 @@ int main() {
         nodes[i].shader_index = 0;
 
         glm_mat4_identity(nodes[i].transform);
+        glm_translate(nodes[i].transform, (vec3){});
         glm_mat4_identity(nodes[i].normal_matrix);
     }
 
@@ -55,7 +59,7 @@ int main() {
         // RENDER
         draw_frame_start();
 
-        draw_node(&nodes[0], main_camera);
+        draw_node(&scene.nodes[0], main_camera);
 
         draw_frame_end(viewport);
     }

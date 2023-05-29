@@ -21,22 +21,20 @@ typedef struct Shader {
     int32_t diffuse_reflectivity_loc;
 } Shader;
 
-uint32_t compile_vertex_shader(const char *source);
+typedef struct Material {
+    Shader shader;
+} Material;
 
-uint32_t compile_fragment_shader(const char *source);
+Shader shader_setup(uint32_t program_handle);
 
-uint32_t build_program(int count, ...);
+Shader shader_load_from_files(const char* vertex_source, const char* fragment_source);
 
-Shader setup_shader(uint32_t program_handle);
+void material_set_in_use(Material *material);
 
-Shader load_shader_from_files(const char* vertex_source, const char* fragment_source);
+void material_set_mvp(Shader shader, mat4 view, mat4 model_view, mat4 projection);
 
-void use_shader(Shader shader);
+void material_set_light(Shader shader, vec3 position, vec3 intensity, vec3 reflectivity);
 
-void set_shader_mvp(Shader shader, mat4 view, mat4 model_view, mat4 projection);
-
-void set_shader_light(Shader shader, vec3 position, vec3 intensity, vec3 reflectivity);
-
-void set_shader_normal_matrix(Shader shader, mat4 normal_matrix);
+void material_set_normal_matrix(Shader shader, mat4 normal_matrix);
 
 #endif //SUPERMARIO_SHADER_H
