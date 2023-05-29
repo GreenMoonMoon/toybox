@@ -1,14 +1,8 @@
 //
 // Created by josue on 2023-01-27.
 //
-#include "shader.h"
+#include "material.h"
 #include <stdarg.h>
-
-// language=GLSL
-const char *debug_vs_source = "#version 460\nlayout (location = 0) in vec3 aPosition;\nlayout (location = 1) in vec3 aNormal;\nlayout (location = 2) in vec2 aTexcoord;\n\nuniform mat4 mvp;\n\nout vec3 normal;\n\nvoid main() {\n    normal = (vec4(aNormal, 1.0) * mvp).xyz;\n    gl_Position = vec4(aPosition, 1.0) * mvp;\n}";
-
-// language=GLSL
-const char *debug_fs_source = "#version 460\nout vec4 FragColor;\n\nin vec3 normal;\n\nvoid main() {\n    vec3 color = vec3(1.0f, 0.5f, 0.2f);\n    color *= dot(normal, vec3(0.0, 0.0, -1.0));\n    FragColor = vec4(color, 1.0f);\n} ";
 
 void validate_shader(GLuint handle) {
     GLint success = 0;
@@ -99,17 +93,9 @@ Shader setup_shader(GLuint program_handle) {
     };
 }
 
-Shader load_shader_from_source(const char *vertex_source, const char *fragment_source) {
+Shader load_shader_from_files(const char *vertex_source, const char *fragment_source) {
     GLuint vertex_handle = compile_vertex_shader(vertex_source);
     GLuint fragment_handle = compile_fragment_shader(fragment_source);
-    GLuint program_handle = build_program(2, vertex_handle, fragment_handle);
-
-    return setup_shader(program_handle);
-}
-
-Shader load_debug_shader() {
-    GLuint vertex_handle = compile_vertex_shader(debug_vs_source);
-    GLuint fragment_handle = compile_fragment_shader(debug_fs_source);
     GLuint program_handle = build_program(2, vertex_handle, fragment_handle);
 
     return setup_shader(program_handle);

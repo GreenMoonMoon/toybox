@@ -1,10 +1,8 @@
-#include <stdlib.h>
-#include "types/mesh.h"
-#include "gpu.h"
 #include "gltf.h"
-
+#include <stdlib.h>
+#include <stdio.h>
+#include "model.h"
 #define CGLTF_IMPLEMENTATION
-
 #include "cgltf.h"
 
 typedef struct GpuBufferList {
@@ -12,6 +10,41 @@ typedef struct GpuBufferList {
     cgltf_buffer_view *buffer_views;
     uint32_t buffer_view_count;
 } GpuBufferList;
+
+void print_result(cgltf_result result){
+    char *message;
+    switch (result) {
+        case cgltf_result_data_too_short:
+            message = "Data is too short";
+            break;
+        case cgltf_result_unknown_format:
+            message = "Unknown format";
+            break;
+        case cgltf_result_invalid_json:
+            message = "Invalid JSON";
+            break;
+        case cgltf_result_invalid_gltf:
+            message = "Invalid GLTF";
+            break;
+        case cgltf_result_file_not_found:
+            message = "File not found";
+            break;
+        case cgltf_result_io_error:
+            // todo: print the io error
+            message = "IO error";
+            break;
+        case cgltf_result_out_of_memory:
+            message = "Out of memory";
+            break;
+        case cgltf_result_legacy_gltf:
+            message = "Legacy GLTF not supported";
+            break;
+        default:
+            message = "";
+            break;
+    }
+    fprintf(stderr, "ERROR GLTF: %s", message);
+}
 
 uint32_t load_buffer(cgltf_buffer_view *buffer_view){
     uint32_t handle = 0;
@@ -169,4 +202,25 @@ bool load_gltf_file(const char *filename, gltfResource *gltf_resource) {
 
 void free_gltf(gltfResource gltf_resource){
 
+}
+
+size_t gltf_load_models(const char *filename, struct Model **models) {
+    cgltf_options options = {0};
+    cgltf_data *data;
+
+    size_t model_count = 0;
+
+    cgltf_result result = cgltf_parse_file(&options, filename, &data);
+    if (result == cgltf_result_success) {
+        result = cgltf_load_buffers(&options, data, filename);
+        if (result != cgltf_result_success) {
+            print_result(result);
+            cgltf_free(data);
+            return 0;
+        }
+
+
+    }
+
+    return model_count;
 }

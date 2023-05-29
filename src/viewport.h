@@ -16,4 +16,8 @@ void viewport_delete(Viewport *viewport);
 bool viewport_is_closing(Viewport *viewport);
 void viewport_close(Viewport *viewport);
 
+void viewport_process_events(Viewport *viewport);
+double viewport_get_delta_time(Viewport *viewport);
+void viewport_swap_window(Viewport *viewport);
+
 #endif //TOYBOX_SRC_VIEWPORT_H_

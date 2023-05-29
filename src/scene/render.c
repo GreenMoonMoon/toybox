@@ -5,8 +5,7 @@
 #include "inputs.h"
 
 #include "types/mesh.h"
-#include "types/node.h"
-#include "types/shader.h"
+#include "material.h"
 
 bool init_render(int width, int height) {
     glfwInit();

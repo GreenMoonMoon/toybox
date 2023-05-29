@@ -7,13 +7,15 @@
 
 #include <stdbool.h>
 
-#include "mesh.h"
-#include "shader.h"
+#include "types/mesh.h"
+#include "material.h"
 #include "cglm/cglm.h"
 
 struct ListNode;
 
 typedef struct Model {
+    uint32_t gpu_handle;
+
     struct ListNode *node;
     struct Mesh mesh;
     mat4 transform;
@@ -24,11 +26,9 @@ typedef struct Model {
     Shader shader;
 } Model;
 
-Model *models;
 struct ListNode *model_node_pool;
 
 void allocate_model_node_pool(size_t model_count);
-
 
 void calculate_normal_matrix(Model *model, mat4 view_matrix);
 
@@ -39,5 +39,9 @@ void scale_model(Model *model, vec3 scale);
 void rotate_model(Model *model, float angle, vec3 axis);
 
 void free_models(Model *models, int count);
+
+void model_delete(Model *model);
+
+void models_delete(Model *models, size_t model_count);
 
 #endif //SUPERMARIO_MODEL_H

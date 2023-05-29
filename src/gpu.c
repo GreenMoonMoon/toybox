@@ -4,6 +4,7 @@
 
 #include "gpu.h"
 #include "types/mesh.h"
+#include "model.h"
 
 #include "glad/gl.h"
 
@@ -81,4 +82,8 @@ void set_primitive_attribute_3f(bool normalized, uint32_t index, uint32_t bindin
     glVertexArrayVertexBuffer(primitive->vao, binding_index, buffer.handle, buffer.offset, (int32_t)buffer.stride);
     glVertexArrayAttribFormat(primitive->vao, index, 3, GL_FLOAT, normalized, 0);
     glVertexArrayAttribBinding(primitive->vao, index, binding_index);
+}
+
+void gpu_load_static_model(Model *model) {
+    return 0;
 }

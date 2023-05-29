@@ -5,7 +5,7 @@
 #ifndef SUPERMARIO_GLSL_H
 #define SUPERMARIO_GLSL_H
 
-#include "types/shader.h"
+#include "material.h"
 #include "io/file.h"
 
 /// Load and compile a programe from a single vertex and fragment sources

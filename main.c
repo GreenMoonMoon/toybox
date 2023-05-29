@@ -1,7 +1,13 @@
 #include <stdlib.h>
 #include "viewport.h"
-#include "camera.h"
+#include "behavior/debug_camera.h"
+#include "draw.h"
+#include "model.h"
+#include "material.h"
+#include "scene.h"
+#include "gpu.h"
 #include "cglm/cglm.h"
+#include "io/gltf.h"
 
 Camera *main_camera;
 
@@ -11,14 +17,16 @@ int main() {
 
     //load resources
     Model *models;
-    int model_count = load_model("C:\\Users\\josue\\Projects\\supermario64\\assets\\scenes\\physics_tests.m3d", models);
-    for(int i = 0; i < model_count; i++) {
-
+    size_t model_count = gltf_load_models("C:\\Users\\josue\\Projects\\supermario64\\assets\\models\\generics.glb", &models);
+    for(size_t i = 0; i < model_count; i++) {
+        gpu_load_static_model(&models[i]);
     }
 
-    Shader shaders[1];
-    shaders[0] = load_glsl_from_files("C:/Users/josue/Projects/supermario64/assets/shaders/basic.vert",
-                                      "C:/Users/josue/Projects/supermario64/assets/shaders/basic.frag");
+    Shader basic_shader = load_shader_from_files("C:/Users/josue/Projects/supermario64/assets/shaders/basic.vert",
+                                                 "C:/Users/josue/Projects/supermario64/assets/shaders/basic.frag");
+    Material basic_material = {
+        .shader = shader,
+    };
 
     uint32_t id = 0;
     Node *nodes = malloc(mesh_count * sizeof(Mesh));
@@ -33,37 +41,26 @@ int main() {
         glm_mat4_identity(nodes[i].normal_matrix);
     }
 
-    Scene scene = {
-        .root_node_indices = malloc(mesh_count * sizeof(size_t)),
-        .root_node_count = mesh_count,
-    };
-    scene.root_node_indices[0] = 0;
-    scene.root_node_indices[1] = 1;
-    scene.root_node_indices[2] = 2;
-
-    free_gltf(gltf);
-
     // Setup camera;
     debug_camera_init();
     main_camera = &debug_camera;
 
     while (!viewport_is_closing(viewport)) {
-        glfwPollEvents();
-        double delta_time = get_delta_time();
+        viewport_process_events(viewport);
+        double delta_time = viewport_get_delta_time(viewport);
 
         // UPDATE
         debug_camera_update(delta_time);
 
         // RENDER
-        render_begin();
+        draw_frame_start();
 
-        draw_node(nodes[0], *main_camera, meshes, shaders);
+        draw_node(&nodes[0], main_camera);
 
-        render_end();
+        draw_frame_end(viewport);
     }
 
-    free_meshes(meshes, mesh_count);
-    free_scene(scene);
+    models_delete(models, model_count);
     viewport_delete(viewport);
 
     return EXIT_SUCCESS;

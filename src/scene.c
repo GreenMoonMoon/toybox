@@ -5,6 +5,6 @@
 #include "scene.h"
 #include <stdlib.h>
 
-void free_scene(Scene scene){
-    free(scene.root_node_indices);
+void scene_delete(Scene *scene){
+
 }

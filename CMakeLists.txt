@@ -31,19 +31,19 @@ add_executable(toybox)
 target_sources(toybox PRIVATE
         main.c
         src/viewport.c
+        src/draw.c
         src/io/file.c
         src/io/glsl.c
         src/io/gltf.c
-        src/io/gpu.c
+        src/gpu.c
         src/scene/inputs.c
         src/scene/render.c
         src/types/mesh.c
-        src/types/model.c
+        src/model.c
         src/camera.c
-        src/types/scene.c
-        src/types/shader.c
+        src/scene.c
+        src/material.c
         src/types/simple_string.c
-        src/types/node.c
         ${extern_SOURCES})
 target_include_directories(toybox PRIVATE src)
 target_link_libraries(toybox PRIVATE SDL2 SDL2main)

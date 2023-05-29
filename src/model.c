@@ -35,3 +35,15 @@ void free_models(Model *models, int count) {
     }
     free(models);
 }
+
+void model_delete(Model *model){
+
+}
+
+void models_delete(Model *models, size_t model_count) {
+    for (size_t i = 0; i < model_count; ++i) {
+        model_delete(&models[i]);
+    }
+    free(models);
+    models = NULL;
+}

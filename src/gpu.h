@@ -9,6 +9,8 @@
 #include <stdbool.h>
 #include "types/mesh.h"
 
+struct Model;
+
 uint32_t load_static_array_buffer(size_t size, const void *data);
 
 uint32_t load_static_element_array_buffer(size_t size, const void *data);
@@ -25,5 +27,7 @@ void set_primitive_attribute_1f(bool normalized, uint32_t index, uint32_t bindin
 void set_primitive_attribute_2f(bool normalized, uint32_t index, uint32_t binding_index, GpuBufferView buffer, Primitive *primitive);
 void set_primitive_attribute_3f(bool normalized, uint32_t index, uint32_t binding_index, GpuBufferView buffer, Primitive *primitive);
 void set_primitive_attribute_4f(bool normalized, uint32_t index, uint32_t binding_index, GpuBufferView buffer, Primitive *primitive);
+
+void gpu_load_static_model(struct Model *model);
 
 #endif //SUPERMARIO_GPU_H

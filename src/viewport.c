@@ -12,6 +12,7 @@ struct Viewport {
   SDL_Window *window;
   SDL_GLContext context;
   bool closing;
+  uint64_t last_frame_time;
 };
 
 void viewport_init(uint32_t width, uint32_t height, const char *name, struct Viewport **viewport) {
@@ -39,6 +40,7 @@ void viewport_init(uint32_t width, uint32_t height, const char *name, struct Vie
     (*viewport)->window = window;
     (*viewport)->context = context;
     (*viewport)->closing = false;
+    (*viewport)->last_frame_time = SDL_GetPerformanceCounter();
 }
 
 void viewport_delete(struct Viewport *viewport) {
@@ -53,4 +55,25 @@ bool viewport_is_closing(struct Viewport *viewport) {
 
 void viewport_close(struct Viewport *viewport) {
     viewport->closing = true;
+}
+
+void viewport_process_events(Viewport *viewport) {
+    SDL_Event event;
+    while(SDL_PollEvent(&event)) {
+        switch (event.type) {
+            case SDL_QUIT:
+                viewport->closing = true;
+                break;
+            case SDL_KEYUP:
+                if (event.key.keysym.sym == SDLK_ESCAPE) viewport->closing = true;
+                break;
+        }
+    }
+}
+
+double viewport_get_delta_time(Viewport *viewport) {
+    uint64_t current_frame_time = SDL_GetPerformanceCounter();
+    double delta_time = (double)(current_frame_time - viewport->last_frame_time) / (double)SDL_GetPerformanceFrequency();
+    viewport->last_frame_time = current_frame_time;
+    return delta_time;
 }

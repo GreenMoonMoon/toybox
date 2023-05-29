@@ -29,9 +29,7 @@ uint32_t build_program(int count, ...);
 
 Shader setup_shader(uint32_t program_handle);
 
-Shader load_debug_shader();
-
-Shader load_shader_from_source(const char* vertex_source, const char* fragment_source);
+Shader load_shader_from_files(const char* vertex_source, const char* fragment_source);
 
 void use_shader(Shader shader);
 
