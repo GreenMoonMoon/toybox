@@ -1,25 +1,37 @@
 #include <stdlib.h>
+
 #include "viewport.h"
-//#include "behavior/debug_camera.h"
+#include "material.h"
+#include "model.h"
 #include "draw.h"
-//#include "model.h"
-//#include "material.h"
-//#include "scene.h"
-//#include "gpu.h"
-//#include "cglm/cglm.h"
-//#include "io/gltf.h"
-//#include "memory.h"
 
 Viewport *viewport;
-
-//Scene scene;
-//Camera *main_camera;
-//Model *models;
+Model model;
+Material material;
 
 int main() {
     viewport_init(800, 600, "Main", &viewport);
 
-//    //load resources
+    //load resources
+    Model quad = {0};
+    Mesh quad_mesh = {0};
+
+    float vertices[12] = {
+        -1.0f, 1.0f, 0.0f, -1.0f, -1.0f, 0.0f,
+        1.0f, -1.0f, 0.0f, 1.0f, 1.0f, 0.0f,
+    };
+
+    uint32_t indices[6] = {
+        0, 1, 2, 2, 3, 0,
+    };
+
+    quad_mesh.vertex_buffer = vertices;
+    quad_mesh.vertex_buffer_length = sizeof(float) * 12;
+    quad_mesh.index_buffer = indices;
+    quad_mesh.index_buffer_length = sizeof(uint32_t) * 6;
+
+    mesh_load(&quad_mesh);
+
 //    size_t model_count = gltf_load_models("assets/models/generics.glb", &models);
 //    for(size_t i = 0; i < model_count; i++) {
 //        gpu_load_static_model(&models[i]);
@@ -61,11 +73,12 @@ int main() {
 
         // RENDER
         draw_frame_start();
-
 //        draw_node(&scene.nodes[0], main_camera);
 
         draw_frame_end(viewport);
     }
+
+    mesh_unload(&quad_mesh);
 
 //    models_delete(models, model_count);
     viewport_delete(viewport);

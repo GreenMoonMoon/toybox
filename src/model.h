@@ -7,20 +7,13 @@
 
 #include <stdbool.h>
 #include "cglm/cglm.h"
+#include "mesh.h"
+#include "gpu_generics.h"
 
 struct ListNode;
 struct Material;
 
-typedef struct Mesh {
-  uint32_t vao;
-  uint32_t mode;
-  int32_t index_count;
-} Mesh;
-
 typedef struct Model {
-    uint32_t gpu_handle;
-
-    struct ListNode *node;
     mat4 transform;
     mat4 model_view_matrix;
     mat4 normal_matrix;

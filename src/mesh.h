@@ -7,9 +7,25 @@
 
 #include <stdint.h>
 #include <stdbool.h>
-#include "types/mesh.h"
 
-struct Model;
+typedef struct Mesh {
+  uint32_t vao;
+  uint32_t vbo;
+  uint32_t ebo;
+  uint32_t mode;
+  int32_t index_count;
+
+  float *vertex_buffer;
+  int64_t vertex_buffer_length;
+  uint32_t *index_buffer;
+  int64_t index_buffer_length;
+} Mesh;
+
+void mesh_load(Mesh *mesh);
+void mesh_unload(Mesh *mesh);
+
+void gpu_load_static_vertex_buffer(struct Mesh *mesh, uint8_t *buffer, int64_t length);
+void gpu_load_static_element_buffer(struct Mesh *mesh, uint8_t *buffer, int64_t length);
 
 uint32_t load_static_array_buffer(size_t size, const void *data);
 

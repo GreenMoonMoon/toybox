@@ -32,7 +32,7 @@ target_sources(toybox PRIVATE
         main.c
         src/viewport.c
         src/draw.c
-        src/gpu.c
+        src/mesh.c
         ${extern_SOURCES})
 target_include_directories(toybox PRIVATE src)
 target_link_libraries(toybox PRIVATE SDL2::SDL2main SDL2::SDL2-static)

@@ -2,12 +2,49 @@
 // Created by josue on 2023-02-16.
 //
 
-#include "gpu.h"
-#include "types/mesh.h"
-#include "model.h"
+#include "mesh.h"
 
 #include "glad/gl.h"
 
+void mesh_load(Mesh *mesh) {
+    uint32_t buffers[2];
+    glGenBuffers(2, buffers);
+    glBufferData(GL_VERTEX_ARRAY, mesh->vertex_buffer_length, mesh->vertex_buffer, GL_STATIC_DRAW);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, mesh->index_buffer_length, mesh->index_buffer, GL_STATIC_DRAW);
+    mesh->vbo = buffers[0];
+    mesh->ebo = buffers[1];
+
+    glGenVertexArrays(1, &mesh->vao);
+    glBindVertexArray(mesh->vao);
+
+    // Position
+    glEnableVertexAttribArray(0); // aPosition attribute
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
+    glBindBuffer(GL_VERTEX_ARRAY, 0); // Unbind vertex array buffer
+
+    glBindVertexArray(0); // Unbind vertex array object (Bind invalid VAO object at index 0)
+}
+
+void mesh_unload(Mesh *mesh) {
+    glBindVertexArray(0);
+    glDeleteBuffers(1, &mesh->vbo);
+    glDeleteBuffers(1, &mesh->ebo);
+    glDeleteVertexArrays(1, &mesh->vao);
+
+    mesh->vao = 0;
+    mesh->vbo = 0;
+    mesh->ebo = 0;
+}
+
+void gpu_load_static_vertex_buffer(Mesh *mesh, uint8_t *buffer, int64_t length) {
+    uint32_t vbo = 0;
+    glGenBuffers(1, &vbo);
+    glBindBuffer(GL_ARRAY_BUFFER, vbo);
+    glBufferData(GL_ARRAY_BUFFER, length, buffer, GL_STATIC_DRAW);
+
+    if (mesh->vao == 0) mesh_initialize(mesh);
+    glBindVertexArray(mesh->vao);
+}
 
 uint32_t load_static_array_buffer(size_t size, const void *data) {
     uint32_t handle;
