@@ -32,16 +32,16 @@ int main() {
 
     mesh_load(&quad_mesh);
 
+    Shader basic_shader = shader_load_from_files("assets/shaders/basic.vert",
+                                                 "assets/shaders/basic.frag");
+    Material basic_material = {
+        .shader = basic_shader,
+    };
+
 //    size_t model_count = gltf_load_models("assets/models/generics.glb", &models);
 //    for(size_t i = 0; i < model_count; i++) {
 //        gpu_load_static_model(&models[i]);
 //    }
-
-//    Shader basic_shader = shader_load_from_files("assets/shaders/basic.vert",
-//                                                 "assets/shaders/basic.frag");
-//    Material basic_material = {
-//        .shader = basic_shader,
-//    };
 //
 //    // Setup scene
 //    scene.node_count = model_count;
@@ -73,6 +73,7 @@ int main() {
 
         // RENDER
         draw_frame_start();
+        draw_mesh(mesh, material);
 //        draw_node(&scene.nodes[0], main_camera);
 
         draw_frame_end(viewport);

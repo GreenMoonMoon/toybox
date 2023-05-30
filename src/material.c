@@ -94,8 +94,8 @@ Shader shader_load_from_files(const char *vertex_source, const char *fragment_so
     return shader_setup(program_handle);
 }
 
-void material_set_in_use(Material *material) {
-    glUseProgram(material->shader.handle);
+void material_set_in_use(Material material) {
+    glUseProgram(material.shader.handle);
 }
 
 void material_set_mvp(Shader shader, mat4 view, mat4 model_view, mat4 projection) {

@@ -18,6 +18,13 @@ void draw_frame_end(Viewport *viewport) {
     viewport_swap_window(viewport);
 }
 
+void draw_mesh(Mesh mesh, Material material) {
+    material_set_in_use(material);
+
+    glBindVertexArray(mesh.vao);
+    glDrawElements(GL_TRIANGLES, mesh.index_count, );
+}
+
 //void draw_node(struct Node *node, struct Camera *camera) {
 //    draw_model(node->model);
 //}
