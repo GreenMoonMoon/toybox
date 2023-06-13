@@ -18,6 +18,8 @@ void viewport_close(Viewport *viewport);
 
 void viewport_process_events(Viewport *viewport);
 double viewport_get_delta_time(Viewport *viewport);
+void viewport_clear();
+void viewport_set_clear_color(float r, float g, float b, float a);
 void viewport_swap_window(Viewport *viewport);
 
 #endif //TOYBOX_SRC_VIEWPORT_H_
