@@ -35,6 +35,7 @@ target_sources(toybox PRIVATE
         src/graphic/mesh.c
         src/graphic/material.c
         src/io/file.c
+        src/scene/node.c
         ${extern_SOURCES})
 target_include_directories(toybox PRIVATE src)
 target_link_libraries(toybox PRIVATE SDL2::SDL2main SDL2::SDL2-static)

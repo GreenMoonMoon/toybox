@@ -4,6 +4,8 @@
 #include "graphic/material.h"
 #include "graphic/mesh.h"
 #include "graphic/draw.h"
+
+#include "scene/node.h"
 #include "cglm/cglm.h"
 
 Viewport *viewport;
@@ -13,30 +15,7 @@ int main() {
 
     viewport_set_clear_color(0.1f, 1.0f, 0.1f, 1.0f);
 
-    float vertices[12] = {
-        -1.0f, 1.0f, 0.0f, -1.0f, -1.0f, 0.0f,
-        1.0f, -1.0f, 0.0f, 1.0f, 1.0f, 0.0f,
-    };
-
-    uint32_t indices[6] = {
-        0, 1, 2, 2, 3, 0,
-    };
-
-    //Load mesh
-    Mesh quad = mesh_load(vertices, sizeof(vertices), indices, sizeof(indices));
-
-    // Load Material
-    Material material = material_load_from_files(
-        "assets/shaders/basic.vert", "assets/shaders/basic.frag"
-        );
-
-    mat4 model;
-    glm_mat4_identity(model);
-    mat4 view;
-    glm_mat4_identity(view);
-    glm_translate(view, (vec3){0.0f, 0.0f, -4.0f});
-    mat4 projection;
-    glm_perspective(75.0f, 4.0f/3.0f, 0.1f, 100.0f, projection);
+    Node node = node_create();
 
     while (!viewport_is_closing(viewport)) {
         viewport_process_events(viewport);
@@ -44,13 +23,12 @@ int main() {
 
         viewport_clear();
 
-        draw_mesh(quad, model, view, projection, material);
+        node_draw(&node);
 
         viewport_swap_window(viewport);
     }
 
-    mesh_unload(quad);
-    material_unload(material);
+    node_delete(&node);
 
     viewport_delete(viewport);
 
