@@ -127,16 +127,6 @@ void material_set_mvp(Material material, mat4 model, mat4 view, mat4 projection)
     glUniformMatrix4fv(material.shader.mvp_loc, 1, GL_FALSE, (float *) mvp);
 }
 
-void material_set_light(Shader shader, vec3 position, vec3 intensity, vec3 reflectivity) {
-    glUniform3fv(shader.light_source_loc, 1, position);
-    glUniform3fv(shader.light_intensity_loc, 1, intensity);
-    glUniform3fv(shader.diffuse_reflectivity_loc, 1, reflectivity);
-}
-
-void material_set_normal_matrix(Shader shader, mat4 normal_matrix){
-    glUniformMatrix4fv(shader.normal_loc, 1, GL_FALSE, (float *) normal_matrix);
-}
-
 void material_unload(Material material) {
     glDeleteProgram(material.shader.handle);
 }

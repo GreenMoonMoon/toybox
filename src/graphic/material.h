@@ -35,10 +35,6 @@ void material_set_in_use(Material material);
 
 void material_set_mvp(Material material, mat4 model, mat4 view, mat4 projection);
 
-void material_set_light(Shader shader, vec3 position, vec3 intensity, vec3 reflectivity);
-
-void material_set_normal_matrix(Shader shader, mat4 normal_matrix);
-
 void material_unload(Material material);
 
 #endif //SUPERMARIO_SHADER_H
