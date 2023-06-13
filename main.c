@@ -23,22 +23,29 @@ int main() {
 
     //Load mesh
     GLuint buffers[2];
-    glGenBuffers(2, buffers);
+    glCreateBuffers(2, buffers);
 
     glBindBuffer(GL_ARRAY_BUFFER, buffers[0]);
     glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+    GLintptr base_offset = 0;
+    GLsizei vertex_size = sizeof(float) * 3;
+    GLsizei relative_offset = 0;
+
 
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, buffers[1]);
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
 
     GLuint vao;
-    glGenVertexArrays(1, &vao);
+    glCreateVertexArrays(1, &vao);
     glBindVertexArray(vao);
 
-    glEnableVertexAttribArray(0);
-    // The following function is the one to bind the buffer bound to GL_ARRAY_BUFFER and the currently bound vao
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0); //Use the attribute buffer bound at GL_ARRAY_BUFFER
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, buffers[1]); //This bind is necessary to bind the current element buffer to the currently bound vao
+    glEnableVertexArrayAttrib(vao, 0);
+
+    glVertexArrayVertexBuffer(vao, 0, buffers[0], base_offset, vertex_size); // Bind a buffer to binding point 0
+    glVertexArrayAttribFormat(vao, 0, 3, GL_FLOAT, GL_FALSE, relative_offset);
+    glVertexArrayAttribBinding(vao, 0, 0); // Bind attribute location to binding point
+
+    glVertexArrayElementBuffer(vao, buffers[1]);
 
     // Load Material
     Material material = material_load_from_files(
