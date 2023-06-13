@@ -74,7 +74,6 @@ GLuint build_program(int count, ...) {
 }
 
 Shader shader_setup(uint32_t program_handle) {
-    glUseProgram(program_handle);
     return (Shader) {
             .handle = program_handle,
             .view_loc = glGetUniformLocation(program_handle, "view"),
