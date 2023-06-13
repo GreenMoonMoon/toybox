@@ -3,6 +3,7 @@
 #include "graphic/viewport.h"
 #include "graphic/material.h"
 #include "graphic/mesh.h"
+#include "graphic/draw.h"
 #include "cglm/cglm.h"
 #include "glad/gl.h"
 
@@ -44,10 +45,7 @@ int main() {
 
         glClear(GL_COLOR_BUFFER_BIT);
 
-        glBindVertexArray(quad.vao);
-        material_set_in_use(material);
-        material_set_mvp(material, model, view, projection);
-        glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+        draw_mesh(quad, model, view, projection, material);
 
         viewport_swap_window(viewport);
     }

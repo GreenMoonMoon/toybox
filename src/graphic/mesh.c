@@ -34,7 +34,7 @@ Mesh mesh_load(float *vertices, int64_t vertices_size, uint32_t *indices, int64_
     Mesh mesh = {
         .vao = vao,
         .buffers = {buffers[0], buffers[1]},
-        .index_count = 0,
+        .index_count = (int32_t)(indices_size / sizeof(uint32_t)),
     };
     return mesh;
 }
