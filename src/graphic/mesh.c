@@ -6,34 +6,43 @@
 
 #include "glad/gl.h"
 
-void mesh_load(Mesh *mesh) {
-    uint32_t buffers[2];
-    glGenBuffers(2, buffers);
-    glBufferData(GL_VERTEX_ARRAY, mesh->vertex_buffer_length, mesh->vertex_buffer, GL_STATIC_DRAW);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, mesh->index_buffer_length, mesh->index_buffer, GL_STATIC_DRAW);
-    mesh->vbo = buffers[0];
-    mesh->ebo = buffers[1];
+Mesh mesh_load(float *vertices, int64_t vertices_size, uint32_t *indices, int64_t indices_size) {
+    GLuint buffers[2];
+    glCreateBuffers(2, buffers);
 
-    glGenVertexArrays(1, &mesh->vao);
-    glBindVertexArray(mesh->vao);
+    glBindBuffer(GL_ARRAY_BUFFER, buffers[0]);
+    glBufferData(GL_ARRAY_BUFFER, vertices_size, vertices, GL_STATIC_DRAW);
+    GLintptr base_offset = 0;
+    GLsizei vertex_size = sizeof(float) * 3;
+    GLsizei relative_offset = 0;
 
-    // Position
-    glEnableVertexAttribArray(0); // aPosition attribute
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
-    glBindBuffer(GL_VERTEX_ARRAY, 0); // Unbind vertex array buffer
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, buffers[1]);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices_size, indices, GL_STATIC_DRAW);
 
-    glBindVertexArray(0); // Unbind vertex array object (Bind invalid VAO object at index 0)
+    GLuint vao;
+    glCreateVertexArrays(1, &vao);
+    glBindVertexArray(vao);
+
+    glEnableVertexArrayAttrib(vao, 0);
+
+    glVertexArrayVertexBuffer(vao, 0, buffers[0], base_offset, vertex_size); // Bind a buffer to binding point 0
+    glVertexArrayAttribFormat(vao, 0, 3, GL_FLOAT, GL_FALSE, relative_offset);
+    glVertexArrayAttribBinding(vao, 0, 0); // Bind attribute location to binding point
+
+    glVertexArrayElementBuffer(vao, buffers[1]);
+
+    Mesh mesh = {
+        .vao = vao,
+        .buffers = {buffers[0], buffers[1]},
+        .index_count = 0,
+    };
+    return mesh;
 }
 
-void mesh_unload(Mesh *mesh) {
+void mesh_unload(Mesh mesh) {
     glBindVertexArray(0);
-    glDeleteBuffers(1, &mesh->vbo);
-    glDeleteBuffers(1, &mesh->ebo);
-    glDeleteVertexArrays(1, &mesh->vao);
-
-    mesh->vao = 0;
-    mesh->vbo = 0;
-    mesh->ebo = 0;
+    glDeleteBuffers(2, mesh.buffers);
+    glDeleteVertexArrays(1, &mesh.vao);
 }
 
 //void init_primitive(DrawMode mode, Primitive *primitive) {

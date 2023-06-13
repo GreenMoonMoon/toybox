@@ -13,29 +13,16 @@
 ///     per mesh, instead of regenerating a buffer and interleaving all data, we can simply use realloc and append the new attribute
 ///     buffer at the end. This as also the benefit to be easy to align (for example on 4 bytes)
 
-
-/// Contain mesh's data and handle to GPU objects.
-/// \todo manage a more generic version where GPU object handle are more obfuscated while data is reference from MeshData objects.
+/// \todo put the element buffer in its own variable.
 typedef struct Mesh {
   uint32_t vao;
-  uint32_t vbo;
-  uint32_t ebo;
-  uint32_t mode;
+  uint32_t buffers[2];
   int32_t index_count;
-
-  float *vertex_buffer;
-  int64_t vertex_buffer_length;
-  uint32_t *index_buffer;
-  int64_t index_buffer_length;
 } Mesh;
 
-/// Load a mesh data on the GPU
-/// \param mesh
-void mesh_load(Mesh *mesh);
+Mesh mesh_load(float *vertices, int64_t vertices_size, uint32_t *indices, int64_t indices_size);
 
-/// Unload mesh data from the GPU
-/// \param mesh
-void mesh_unload(Mesh *mesh);
+void mesh_unload(Mesh mesh);
 
 void gpu_load_static_vertex_buffer(struct Mesh *mesh, uint8_t *buffer, int64_t length);
 void gpu_load_static_element_buffer(struct Mesh *mesh, uint8_t *buffer, int64_t length);

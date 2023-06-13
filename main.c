@@ -2,6 +2,7 @@
 
 #include "graphic/viewport.h"
 #include "graphic/material.h"
+#include "graphic/mesh.h"
 #include "cglm/cglm.h"
 #include "glad/gl.h"
 
@@ -22,30 +23,7 @@ int main() {
     };
 
     //Load mesh
-    GLuint buffers[2];
-    glCreateBuffers(2, buffers);
-
-    glBindBuffer(GL_ARRAY_BUFFER, buffers[0]);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
-    GLintptr base_offset = 0;
-    GLsizei vertex_size = sizeof(float) * 3;
-    GLsizei relative_offset = 0;
-
-
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, buffers[1]);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
-
-    GLuint vao;
-    glCreateVertexArrays(1, &vao);
-    glBindVertexArray(vao);
-
-    glEnableVertexArrayAttrib(vao, 0);
-
-    glVertexArrayVertexBuffer(vao, 0, buffers[0], base_offset, vertex_size); // Bind a buffer to binding point 0
-    glVertexArrayAttribFormat(vao, 0, 3, GL_FLOAT, GL_FALSE, relative_offset);
-    glVertexArrayAttribBinding(vao, 0, 0); // Bind attribute location to binding point
-
-    glVertexArrayElementBuffer(vao, buffers[1]);
+    Mesh quad = mesh_load(vertices, sizeof(vertices), indices, sizeof(indices));
 
     // Load Material
     Material material = material_load_from_files(
@@ -66,6 +44,7 @@ int main() {
 
         glClear(GL_COLOR_BUFFER_BIT);
 
+        glBindVertexArray(quad.vao);
         material_set_in_use(material);
         material_set_mvp(material, model, view, projection);
         glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
@@ -73,8 +52,7 @@ int main() {
         viewport_swap_window(viewport);
     }
 
-    glDeleteVertexArrays(1, &vao);
-    glDeleteBuffers(2, buffers);
+    mesh_unload(quad);
     material_unload(material);
 
     viewport_delete(viewport);
