@@ -4,33 +4,34 @@
 #include "material.h"
 #include <stdarg.h>
 #include "memory.h"
+#include "io/file.h"
 
 void validate_shader(GLuint handle) {
     GLint success = 0;
     glGetShaderiv(handle, GL_COMPILE_STATUS, &success);
-    GLint log_length = 0;
-    glGetShaderiv(handle, GL_INFO_LOG_LENGTH, &log_length);
-
-    char *log = MALLOC(sizeof(char) * log_length);
     if (!success) {
+        GLint log_length = 0;
+        glGetShaderiv(handle, GL_INFO_LOG_LENGTH, &log_length);
+
+        char *log = MALLOC(sizeof(char) * log_length);
         glGetShaderInfoLog(handle, log_length, NULL, log);
         fprintf(stderr, "ERROR GLSL Shader: %s", log);
+        free(log);
     }
-    free(log);
 }
 
 void validate_program(GLuint handle) {
     GLint success = 0;
     glGetProgramiv(handle, GL_LINK_STATUS, &success);
-    GLint log_length = 0;
-    glGetProgramiv(handle, GL_INFO_LOG_LENGTH, &log_length);
-
-    char *log = MALLOC(sizeof(char) * log_length);
     if (!success) {
+        GLint log_length = 0;
+        glGetProgramiv(handle, GL_INFO_LOG_LENGTH, &log_length);
+
+        char *log = MALLOC(sizeof(char) * log_length);
         glGetProgramInfoLog(handle, log_length, NULL, log);
         fprintf(stderr, "ERROR GLSL Program: %s", log);
+        free(log);
     }
-    free(log);
 }
 
 GLuint compile_shader(const char *source, GLenum shader_type) {
@@ -73,6 +74,7 @@ GLuint build_program(int count, ...) {
 }
 
 Shader shader_setup(uint32_t program_handle) {
+    glUseProgram(program_handle);
     return (Shader) {
             .handle = program_handle,
             .view_loc = glGetUniformLocation(program_handle, "view"),
@@ -86,28 +88,44 @@ Shader shader_setup(uint32_t program_handle) {
     };
 }
 
-Shader shader_load_from_files(const char *vertex_source, const char *fragment_source) {
+Shader shader_load_from_files(const char *vertex_source_file, const char *fragment_source_file) {
+    char *vertex_source;
+    read_file(vertex_source_file, &vertex_source);
     GLuint vertex_handle = compile_shader(vertex_source, GL_VERTEX_SHADER);
+
+    char *fragment_source;
+    read_file(fragment_source_file, &fragment_source);
     GLuint fragment_handle = compile_shader(fragment_source, GL_FRAGMENT_SHADER);
+
     GLuint program_handle = build_program(2, vertex_handle, fragment_handle);
 
     return shader_setup(program_handle);
+}
+
+Material material_load_from_files(const char *vertex_source_file, const char *fragment_source_file) {
+    Material result = {
+        .shader = shader_load_from_files(vertex_source_file, fragment_source_file),
+    };
+
+    return result;
 }
 
 void material_set_in_use(Material material) {
     glUseProgram(material.shader.handle);
 }
 
-void material_set_mvp(Shader shader, mat4 view, mat4 model_view, mat4 projection) {
-    glUniformMatrix4fv(shader.view_loc, 1, GL_FALSE, (float *) model_view);
-    glUniformMatrix4fv(shader.projection_loc, 1, GL_FALSE, (float *) projection);
+void material_set_mvp(Material material, mat4 model, mat4 view, mat4 projection) {
+    mat4 model_view;
+    glm_mat4_mul(view, model, model_view);
+    glUniformMatrix4fv(material.shader.view_loc, 1, GL_FALSE, (float *) model_view);
+    glUniformMatrix4fv(material.shader.projection_loc, 1, GL_FALSE, (float *) projection);
 
     mat4 mvp;
     glm_mat4_mul(model_view, view, mvp);
-    glUniformMatrix4fv(shader.model_view_loc, 1, GL_FALSE, (float *) mvp);
+    glUniformMatrix4fv(material.shader.model_view_loc, 1, GL_FALSE, (float *) mvp);
 
     glm_mat4_mul(projection, mvp, mvp);
-    glUniformMatrix4fv(shader.mvp_loc, 1, GL_FALSE, (float *) mvp);
+    glUniformMatrix4fv(material.shader.mvp_loc, 1, GL_FALSE, (float *) mvp);
 }
 
 void material_set_light(Shader shader, vec3 position, vec3 intensity, vec3 reflectivity) {
@@ -118,4 +136,8 @@ void material_set_light(Shader shader, vec3 position, vec3 intensity, vec3 refle
 
 void material_set_normal_matrix(Shader shader, mat4 normal_matrix){
     glUniformMatrix4fv(shader.normal_loc, 1, GL_FALSE, (float *) normal_matrix);
+}
+
+void material_unload(Material material) {
+    glDeleteProgram(material.shader.handle);
 }

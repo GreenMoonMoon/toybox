@@ -8,7 +8,7 @@
 #include "glad/gl.h"
 #include "GLFW/glfw3.h"
 
-#include "camera.h"
+#include "graphic/camera.h"
 
 #ifndef SUPERMARIO_RENDER_H
 #define SUPERMARIO_RENDER_H

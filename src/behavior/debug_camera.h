@@ -5,7 +5,7 @@
 #ifndef SUPERMARIO_DEBUG_CAMERA_H
 #define SUPERMARIO_DEBUG_CAMERA_H
 
-#include "camera.h"
+#include "graphic/camera.h"
 #include "scene/inputs.h"
 
 #include "cglm/cglm.h"

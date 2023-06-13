@@ -27,14 +27,18 @@ typedef struct Material {
 
 Shader shader_setup(uint32_t program_handle);
 
-Shader shader_load_from_files(const char* vertex_source, const char* fragment_source);
+Shader shader_load_from_files(const char* vertex_source_file, const char* fragment_source_file);
+
+Material material_load_from_files(const char *vertex_source_file, const char *fragment_source_file);
 
 void material_set_in_use(Material material);
 
-void material_set_mvp(Shader shader, mat4 view, mat4 model_view, mat4 projection);
+void material_set_mvp(Material material, mat4 model, mat4 view, mat4 projection);
 
 void material_set_light(Shader shader, vec3 position, vec3 intensity, vec3 reflectivity);
 
 void material_set_normal_matrix(Shader shader, mat4 normal_matrix);
+
+void material_unload(Material material);
 
 #endif //SUPERMARIO_SHADER_H

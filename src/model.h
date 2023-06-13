@@ -7,8 +7,8 @@
 
 #include <stdbool.h>
 #include "cglm/cglm.h"
-#include "mesh.h"
-#include "gpu_generics.h"
+#include "graphic/mesh.h"
+#include "graphic/gpu_generics.h"
 
 struct ListNode;
 struct Material;

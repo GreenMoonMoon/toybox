@@ -5,6 +5,7 @@
 #include "viewport.h"
 #include <stdio.h>
 #include "glad/gl.h"
+#include "debug.h"
 #include "SDL.h"
 #include "memory.h"
 
@@ -32,11 +33,18 @@ void viewport_init(uint32_t width, uint32_t height, const char *name, struct Vie
 
     SDL_GLContext context = SDL_GL_CreateContext(window);
 
-//    glEnable(GL_DEPTH_TEST);
 
     // Check version
     int version = gladLoadGL((GLADloadfunc) SDL_GL_GetProcAddress);
     printf("GL %d.%d\n", GLAD_VERSION_MAJOR(version), GLAD_VERSION_MINOR(version));
+
+    SDL_GL_MakeCurrent(window, context);
+
+#ifndef NDEBUG
+    glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS);
+    glDebugMessageCallback(print_graphic_error_callback, NULL);
+#endif
+//    glEnable(GL_DEPTH_TEST);
 
     *viewport = MALLOC(sizeof(Viewport));
     (*viewport)->window = window;

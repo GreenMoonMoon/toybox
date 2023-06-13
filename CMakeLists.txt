@@ -30,9 +30,11 @@ set(extern_SOURCES extern/glad/src/gl.c)
 add_executable(toybox)
 target_sources(toybox PRIVATE
         main.c
-        src/viewport.c
-        src/draw.c
-        src/mesh.c
+        src/graphic/viewport.c
+        src/graphic/draw.c
+        src/graphic/mesh.c
+        src/graphic/material.c
+        src/io/file.c
         ${extern_SOURCES})
 target_include_directories(toybox PRIVATE src)
 target_link_libraries(toybox PRIVATE SDL2::SDL2main SDL2::SDL2-static)

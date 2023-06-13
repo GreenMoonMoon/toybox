@@ -5,9 +5,6 @@
 #include "draw.h"
 #include "glad/gl.h"
 #include "viewport.h"
-//#include "material.h"
-//#include "scene.h"
-//#include "model.h"
 
 void draw_frame_start() {
     glClearColor(0.7f, 0.9f, 0.1f, 1.0f);
@@ -22,7 +19,7 @@ void draw_mesh(Mesh mesh, Material material) {
     material_set_in_use(material);
 
     glBindVertexArray(mesh.vao);
-    glDrawElements(GL_TRIANGLES, mesh.index_count, );
+    glDrawElements(GL_TRIANGLES, mesh.index_count, GL_UNSIGNED_INT, 0);
 }
 
 //void draw_node(struct Node *node, struct Camera *camera) {

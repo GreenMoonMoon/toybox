@@ -3,7 +3,7 @@
 //
 
 #include "model.h"
-#include "camera.h"
+#include "graphic/camera.h"
 
 #include "cglm/cglm.h"
 

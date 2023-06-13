@@ -5,7 +5,7 @@
 #include "inputs.h"
 
 #include "types/mesh.h"
-#include "material.h"
+#include "graphic/material.h"
 
 void draw_mesh(Mesh mesh) {
 

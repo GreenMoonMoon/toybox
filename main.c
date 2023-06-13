@@ -1,20 +1,16 @@
 #include <stdlib.h>
 
-#include "viewport.h"
-#include "material.h"
-#include "model.h"
-#include "draw.h"
+#include "graphic/viewport.h"
+#include "graphic/material.h"
+#include "cglm/cglm.h"
+#include "glad/gl.h"
 
 Viewport *viewport;
-Model model;
-Material material;
 
 int main() {
     viewport_init(800, 600, "Main", &viewport);
 
-    //load resources
-    Model quad = {0};
-    Mesh quad_mesh = {0};
+    glClearColor(0.1f, 1.0f, 0.1f, 1.0f);
 
     float vertices[12] = {
         -1.0f, 1.0f, 0.0f, -1.0f, -1.0f, 0.0f,
@@ -25,63 +21,55 @@ int main() {
         0, 1, 2, 2, 3, 0,
     };
 
-    quad_mesh.vertex_buffer = vertices;
-    quad_mesh.vertex_buffer_length = sizeof(float) * 12;
-    quad_mesh.index_buffer = indices;
-    quad_mesh.index_buffer_length = sizeof(uint32_t) * 6;
+    //Load mesh
+    GLuint buffers[2];
+    glGenBuffers(2, buffers);
 
-    mesh_load(&quad_mesh);
+    glBindBuffer(GL_ARRAY_BUFFER, buffers[0]);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
 
-    Shader basic_shader = shader_load_from_files("assets/shaders/basic.vert",
-                                                 "assets/shaders/basic.frag");
-    Material basic_material = {
-        .shader = basic_shader,
-    };
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, buffers[1]);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
 
-//    size_t model_count = gltf_load_models("assets/models/generics.glb", &models);
-//    for(size_t i = 0; i < model_count; i++) {
-//        gpu_load_static_model(&models[i]);
-//    }
-//
-//    // Setup scene
-//    scene.node_count = model_count;
-//    scene.nodes = MALLOC(sizeof(Node) * scene.node_count);
-//
-//    uint32_t id = 0;
-//    for (int i = 0; i < scene.node_count; ++i) {
-//        scene.nodes[i].child_count = 0;
-//        scene.nodes[i].children = NULL;
-//        scene.nodes[i].id = id++;
-//        scene.nodes[i].model = &models[i];
-//        scene.nodes[i].material = &basic_material;
-//
-//        glm_mat4_identity(scene.nodes[i].transform);
-//        glm_translate(scene.nodes[i].transform, (vec3){});
-//        glm_mat4_identity(scene.nodes[i].normal_matrix);
-//    }
-//
-//    // Setup camera;
-//    debug_camera_init();
-//    main_camera = &debug_camera;
+    GLuint vao;
+    glGenVertexArrays(1, &vao);
+    glBindVertexArray(vao);
+
+    glEnableVertexAttribArray(0);
+    // The following function is the one to bind the buffer bound to GL_ARRAY_BUFFER and the currently bound vao
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0); //Use the attribute buffer bound at GL_ARRAY_BUFFER
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, buffers[1]); //This bind is necessary to bind the current element buffer to the currently bound vao
+
+    // Load Material
+    Material material = material_load_from_files(
+        "assets/shaders/basic.vert", "assets/shaders/basic.frag"
+        );
+
+    mat4 model;
+    glm_mat4_identity(model);
+    mat4 view;
+    glm_mat4_identity(view);
+    glm_translate(view, (vec3){0.0f, 0.0f, -4.0f});
+    mat4 projection;
+    glm_perspective(75.0f, 4.0f/3.0f, 0.1f, 100.0f, projection);
 
     while (!viewport_is_closing(viewport)) {
         viewport_process_events(viewport);
         double delta_time = viewport_get_delta_time(viewport);
 
-        // UPDATE
-//        debug_camera_update(delta_time);
+        glClear(GL_COLOR_BUFFER_BIT);
 
-        // RENDER
-        draw_frame_start();
-        draw_mesh(mesh, material);
-//        draw_node(&scene.nodes[0], main_camera);
+        material_set_in_use(material);
+        material_set_mvp(material, model, view, projection);
+        glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 
-        draw_frame_end(viewport);
+        viewport_swap_window(viewport);
     }
 
-    mesh_unload(&quad_mesh);
+    glDeleteVertexArrays(1, &vao);
+    glDeleteBuffers(2, buffers);
+    material_unload(material);
 
-//    models_delete(models, model_count);
     viewport_delete(viewport);
 
     return EXIT_SUCCESS;

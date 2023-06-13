@@ -5,8 +5,8 @@ layout (location = 2) in vec2 aTexcoord;
 
 uniform mat4 view;
 uniform mat4 modelView;
-uniform mat4 Projection;
 uniform mat4 normalMatrix;
+uniform mat4 Projection;
 uniform mat4 mvp;
 
 uniform vec4 lightSource;
