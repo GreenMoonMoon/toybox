@@ -5,6 +5,8 @@
 #ifndef VERTEX32_FILE_IO_H
 #define VERTEX32_FILE_IO_H
 
+#include <stdint.h>
+
 /// Return the length of a file in bytes.
 /// \param file_path
 /// \return
@@ -15,5 +17,7 @@ size_t get_file_size(const char* file_path);
 /// \param buffer
 /// \return
 size_t read_file(const char* filename, char **buffer);
+
+size_t read_png_file(const char* filename, uint8_t **buffer);
 
 #endif //VERTEX32_FILE_IO_H

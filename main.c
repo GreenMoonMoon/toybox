@@ -1,12 +1,8 @@
 #include <stdlib.h>
 
 #include "graphic/viewport.h"
-#include "graphic/material.h"
-#include "graphic/mesh.h"
-#include "graphic/draw.h"
-
 #include "scene/node.h"
-#include "cglm/cglm.h"
+#include "geometry/terrain.h"
 
 Viewport *viewport;
 
@@ -16,6 +12,8 @@ int main() {
     viewport_set_clear_color(0.1f, 1.0f, 0.1f, 1.0f);
 
     Node node = node_create();
+
+    Terrain terrain = terrain_load_from_png("assets/textures/heightmap.png");
 
     while (!viewport_is_closing(viewport)) {
         viewport_process_events(viewport);
@@ -29,6 +27,7 @@ int main() {
     }
 
     node_delete(&node);
+    terrain_delete(terrain);
 
     viewport_delete(viewport);
 

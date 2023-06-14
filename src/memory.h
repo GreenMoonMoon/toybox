@@ -9,5 +9,6 @@
 
 #define MALLOC malloc
 #define CALLOC calloc
+#define FREE free
 
 #endif //TOYBOX_SRC_MEMORY_H_

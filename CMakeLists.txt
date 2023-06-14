@@ -21,12 +21,13 @@ include_directories(
         extern/cglm/include
         extern/glad/include
         extern/stb-master
-        extern/cgltf)
+        extern/cgltf
+        extern/stb)
 
 set(extern_SOURCES extern/glad/src/gl.c)
 
 
-# SUPER MARIO
+# TOYBOX
 add_executable(toybox)
 target_sources(toybox PRIVATE
         main.c
@@ -36,6 +37,9 @@ target_sources(toybox PRIVATE
         src/graphic/material.c
         src/io/file.c
         src/scene/node.c
+
+        src/geometry/terrain.c
+
         ${extern_SOURCES})
 target_include_directories(toybox PRIVATE src)
 target_link_libraries(toybox PRIVATE SDL2::SDL2main SDL2::SDL2-static)

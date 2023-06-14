@@ -2,7 +2,6 @@
 // Created by josue on 2023-01-30.
 //
 
-#include "model.h"
 #include "graphic/camera.h"
 
 #include "cglm/cglm.h"

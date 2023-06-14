@@ -1,7 +1,6 @@
 #include "gltf.h"
 #include <stdlib.h>
 #include <stdio.h>
-#include "model.h"
 #define CGLTF_IMPLEMENTATION
 #include "cgltf.h"
 

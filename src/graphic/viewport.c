@@ -44,7 +44,10 @@ void viewport_init(uint32_t width, uint32_t height, const char *name, struct Vie
     glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS);
     glDebugMessageCallback(print_graphic_error_callback, NULL);
 #endif
-//    glEnable(GL_DEPTH_TEST);
+
+    glEnable(GL_DEPTH_TEST);
+    glEnable(GL_CULL_FACE);
+    glCullFace(GL_BACK);
 
     *viewport = MALLOC(sizeof(Viewport));
     (*viewport)->window = window;
@@ -89,7 +92,7 @@ double viewport_get_delta_time(Viewport *viewport) {
 }
 
 void viewport_clear() {
-    glClear(GL_COLOR_BUFFER_BIT);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
 
 void viewport_set_clear_color(float r, float g, float b, float a) {
