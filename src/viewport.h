@@ -5,8 +5,8 @@
 #ifndef TOYBOX_SRC_VIEWPORT_H_
 #define TOYBOX_SRC_VIEWPORT_H_
 
-#include <stdint.h>
 #include <stdbool.h>
+#include <stdint.h>
 
 typedef struct Viewport Viewport;
 

@@ -11,7 +11,8 @@ int main() {
 
     viewport_set_clear_color(0.1f, 1.0f, 0.1f, 1.0f);
 
-    Node node = node_create();
+    Node quad = node_create_quad();
+    Node grid = node_create_grid(5.0f, 5.0f, 4, 4);
 
     Terrain terrain = terrain_load_from_png("assets/textures/heightmap.png");
 
@@ -21,12 +22,14 @@ int main() {
 
         viewport_clear();
 
-        node_draw(&node);
+//        node_draw(&quad);
+        node_draw_wireframe(&quad);
+//        node_draw_wireframe(&grid);
 
         viewport_swap_window(viewport);
     }
 
-    node_delete(&node);
+    node_delete(&quad);
     terrain_delete(terrain);
 
     viewport_delete(viewport);

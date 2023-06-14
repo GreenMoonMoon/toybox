@@ -11,6 +11,8 @@
 #include "cglm/cglm.h"
 
 Terrain terrain_load_from_png(const char *filename) {
+    // TODO: there should be a way to avoid create a transient buffer and pass a transform function to manipulate
+    //  the file data directly while copying them in the final buffer.
     uint8_t *buffer;
     size_t file_size = read_png_file(filename, &buffer);
 

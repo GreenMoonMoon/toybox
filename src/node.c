@@ -3,11 +3,11 @@
 //
 
 #include "node.h"
-#include <stdint.h>
 #include "draw.h"
+#include "memory.h"
 
 
-Node node_create() {
+Node node_create_quad() {
     float vertices[20] = {
         -1.0f,  1.0f,  0.0f,  0.0f,  1.0f,
         -1.0f, -1.0f,  0.0f,  0.0f,  0.0f,
@@ -47,6 +47,53 @@ Node node_create() {
     return node;
 }
 
+Node node_create_grid(float width, float depth, uint32_t subdivision_x, uint32_t subdivision_y) {
+    // Generate vertices
+    int32_t vertex_size = 3 * sizeof(float);
+    int64_t vertex_data_size = (subdivision_x + 1) * (subdivision_y + 1) * (int64_t)sizeof(float) * 3;
+    float *vertex_data = MALLOC(vertex_data_size);
+
+    // Generate indices
+    int32_t index_count = 0;
+    int64_t index_data_size = 0;
+    uint32_t *index_data = MALLOC(index_data_size);
+
+    // Load mesh
+    Mesh grid = mesh_load((uint8_t *)vertex_data, vertex_data_size, vertex_size, index_data, index_data_size);
+    mesh_set_vertex_attribute(grid, 0, 0);
+    mesh_set_vertex_attribute(grid, 2, 3 * sizeof(float));
+
+    // Explicitly passing buffer ownership to the mesh struct
+    grid.vertex_data = (uint8_t*)vertex_data;
+    grid.vertex_data_size = vertex_size;
+    grid.index_data = index_data;
+    grid.index_data_size = index_data_size;
+    grid.index_count = index_count;
+
+    Material material = material_load_from_files("assets/shaders/basic.vert", "assets/shaders/basic.frag");
+
+    mat4 model;
+    glm_mat4_identity(model);
+    mat4 view;
+    glm_mat4_identity(view);
+    glm_translate(view, (vec3){0.0f, 0.0f, -4.0f});
+    mat4 projection;
+    glm_perspective(75.0f, 4.0f/3.0f, 0.1f, 100.0f, projection);
+
+    Node node = {
+        .mesh = grid,
+        .material = material,
+        .model = {0},
+        .view = {0},
+        .projection = {0},
+    };
+    glm_mat4_copy(model, node.model);
+    glm_mat4_copy(view, node.view);
+    glm_mat4_copy(projection, node.projection);
+
+    return node;
+}
+
 void node_delete(Node *node) {
     mesh_delete(node->mesh);
     material_unload(node->material);
@@ -54,4 +101,8 @@ void node_delete(Node *node) {
 
 void node_draw(Node *node) {
     draw_mesh(node->mesh, node->model, node->view, node->projection, node->material);
+}
+
+void node_draw_wireframe(Node *node) {
+    draw_mesh_wireframe(node->mesh, node->model, node->view, node->projection, node->material);
 }

@@ -6,7 +6,7 @@
 #include "memory.h"
 #include "glad/gl.h"
 
-Mesh mesh_load(uint8_t *vertices, int64_t vertices_size, int64_t vertex_size, uint32_t *indices, int64_t indices_size) {
+Mesh mesh_load(uint8_t *vertices, int64_t vertices_size, int32_t vertex_size, uint32_t *indices, int64_t indices_size) {
     GLuint buffers[2];
     glCreateBuffers(2, buffers);
 
@@ -32,18 +32,24 @@ Mesh mesh_load(uint8_t *vertices, int64_t vertices_size, int64_t vertex_size, ui
     return mesh;
 }
 
-
 void mesh_set_vertex_attribute(Mesh mesh, uint32_t attribute_index, int32_t offset) {
     glEnableVertexArrayAttrib(mesh.vao, attribute_index);
     glVertexArrayAttribFormat(mesh.vao, attribute_index, 3, GL_FLOAT, GL_FALSE, offset);
     glVertexArrayAttribBinding(mesh.vao, attribute_index, 0); // Bind attribute location to binding point
 }
 
-void mesh_delete(Mesh mesh) {
-    if (mesh.vertex_data) FREE(mesh.vertex_data);
-    if (mesh.index_data) FREE(mesh.index_data);
+void mesh_unload(Mesh mesh) {
+    // Check and unbind vertex array before deleting it
+    int32_t bound_vao;
+    glGetIntegerv(GL_VERTEX_ARRAY_BINDING, &bound_vao);
+    if (bound_vao == mesh.vao) glBindVertexArray(0);
 
-    glBindVertexArray(0);
     glDeleteBuffers(2, mesh.buffers);
     glDeleteVertexArrays(1, &mesh.vao);
+}
+
+void mesh_delete(Mesh mesh) {
+    mesh_unload(mesh);
+    if (mesh.vertex_data) FREE(mesh.vertex_data);
+    if (mesh.index_data) FREE(mesh.index_data);
 }

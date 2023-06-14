@@ -10,4 +10,7 @@
 
 void draw_mesh(Mesh mesh, mat4 model, mat4 view, mat4 projection, Material material);
 
+/// \todo Use geometry shader instead? (although it is used for debug purposes)
+void draw_mesh_wireframe(Mesh mesh, mat4 model, mat4 view, mat4 projection, Material material);
+
 #endif //TOYBOX_SRC_DRAW_H_
