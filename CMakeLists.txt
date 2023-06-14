@@ -37,6 +37,7 @@ target_sources(toybox PRIVATE
         src/material.c
         src/io/file.c
         src/node.c
+        src/camera.c
 
         src/terrain.c
 

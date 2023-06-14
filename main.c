@@ -2,6 +2,7 @@
 
 #include "viewport.h"
 #include "node.h"
+#include "camera.h"
 #include "terrain.h"
 
 Viewport *viewport;
@@ -10,6 +11,8 @@ int main() {
     viewport_init(800, 600, "Main", &viewport);
 
     viewport_set_clear_color(0.1f, 1.0f, 0.1f, 1.0f);
+
+    Camera camera = camera_create_perspective(4.0f/3.0f, (vec3){0.0f, 0.0f, -8.0f}, 75.0f, 0.1f, 100.0f);
 
     Node quad = node_create_quad();
     Node grid = node_create_grid(5.0f, 5.0f, 4, 4);
@@ -22,9 +25,9 @@ int main() {
 
         viewport_clear();
 
-//        node_draw(&quad);
-        node_draw_wireframe(&quad);
-//        node_draw_wireframe(&grid);
+//        node_draw(&quad, &camera);
+        node_draw_wireframe(&quad, &camera);
+//        node_draw_wireframe(&grid, &camera);
 
         viewport_swap_window(viewport);
     }

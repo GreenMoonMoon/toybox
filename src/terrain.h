@@ -5,6 +5,8 @@
 #ifndef TOYBOX_SRC_GEOMETRY_TERRAIN_H_
 #define TOYBOX_SRC_GEOMETRY_TERRAIN_H_
 
+#include "cglm/cglm.h"
+
 struct Mesh;
 
 typedef struct Terrain {

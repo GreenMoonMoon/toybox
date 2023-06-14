@@ -4,6 +4,7 @@
 
 #include "node.h"
 #include "draw.h"
+#include "camera.h"
 #include "memory.h"
 
 
@@ -27,23 +28,13 @@ Node node_create_quad() {
 
     mat4 model;
     glm_mat4_identity(model);
-    mat4 view;
-    glm_mat4_identity(view);
-    glm_translate(view, (vec3){0.0f, 0.0f, -4.0f});
-    mat4 projection;
-    glm_perspective(75.0f, 4.0f/3.0f, 0.1f, 100.0f, projection);
-
 
     Node node = {
         .mesh = quad,
         .material = material,
-        .model = {0},
-        .view = {0},
-        .projection = {0},
+        .transform = {0},
     };
-    glm_mat4_copy(model, node.model);
-    glm_mat4_copy(view, node.view);
-    glm_mat4_copy(projection, node.projection);
+    glm_mat4_copy(model, node.transform);
     return node;
 }
 
@@ -74,22 +65,13 @@ Node node_create_grid(float width, float depth, uint32_t subdivision_x, uint32_t
 
     mat4 model;
     glm_mat4_identity(model);
-    mat4 view;
-    glm_mat4_identity(view);
-    glm_translate(view, (vec3){0.0f, 0.0f, -4.0f});
-    mat4 projection;
-    glm_perspective(75.0f, 4.0f/3.0f, 0.1f, 100.0f, projection);
 
     Node node = {
         .mesh = grid,
         .material = material,
-        .model = {0},
-        .view = {0},
-        .projection = {0},
+        .transform = {0},
     };
-    glm_mat4_copy(model, node.model);
-    glm_mat4_copy(view, node.view);
-    glm_mat4_copy(projection, node.projection);
+    glm_mat4_copy(model, node.transform);
 
     return node;
 }
@@ -99,10 +81,10 @@ void node_delete(Node *node) {
     material_unload(node->material);
 }
 
-void node_draw(Node *node) {
-    draw_mesh(node->mesh, node->model, node->view, node->projection, node->material);
+void node_draw(Node *node, Camera *camera) {
+    draw_mesh(node->mesh, node->transform, camera->transform, camera->projection, node->material);
 }
 
-void node_draw_wireframe(Node *node) {
-    draw_mesh_wireframe(node->mesh, node->model, node->view, node->projection, node->material);
+void node_draw_wireframe(Node *node, Camera *camera) {
+    draw_mesh_wireframe(node->mesh, node->transform, camera->transform, camera->projection, node->material);
 }
