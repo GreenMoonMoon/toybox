@@ -8,12 +8,12 @@
 struct Mesh;
 
 typedef struct Terrain {
+  struct Mesh *mesh;
   float *heightmap;
   size_t size;
-  struct Mesh *mesh;
 } Terrain;
 
-
+// TODO: load heightmap from png, then initialize terrain with heightmap
 Terrain terrain_load_from_png(const char *filename);
 
 void terrain_delete(Terrain terrain);

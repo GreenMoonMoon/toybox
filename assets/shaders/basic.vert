@@ -17,7 +17,8 @@ out vec3 light;
 out vec3 color;
 
 void main() {
-    color = aNormal;
+//    color = aNormal;
+    color = vec3(aTexcoord, 0.0);
 
     vec3 tNormal = (normalMatrix * vec4(aNormal, 0.0)).xyz;
 

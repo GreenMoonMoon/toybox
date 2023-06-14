@@ -21,16 +21,14 @@ Terrain terrain_load_from_png(const char *filename) {
     terrain.heightmap = MALLOC(file_size * sizeof(float));
     for (int i = 0; i < file_size; ++i) {
         terrain.heightmap[i] = (1.0f / 255.0f) * (float)buffer[i];
-        printf("%f, ", terrain.heightmap[i]);
     }
     terrain.size = (uint32_t)sqrt((double)file_size);
     FREE(buffer);
-
-
 
     return terrain;
 }
 
 void terrain_delete(Terrain terrain){
+    if (terrain.mesh) mesh_delete(*terrain.mesh);
     FREE_ARRAY_2D(terrain.heightmap);
 }

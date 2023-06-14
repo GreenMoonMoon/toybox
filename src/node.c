@@ -8,21 +8,22 @@
 
 
 Node node_create() {
-    float vertices[12] = {
-        -1.0f, 1.0f, 0.0f, -1.0f, -1.0f, 0.0f,
-        1.0f, -1.0f, 0.0f, 1.0f, 1.0f, 0.0f,
+    float vertices[20] = {
+        -1.0f,  1.0f,  0.0f,  0.0f,  1.0f,
+        -1.0f, -1.0f,  0.0f,  0.0f,  0.0f,
+         1.0f, -1.0f,  0.0f,  1.0f,  0.0f,
+         1.0f,  1.0f,  0.0f,  1.0f,  1.0f,
     };
 
     uint32_t indices[6] = {
         0, 1, 2, 2, 3, 0,
     };
 
+    Mesh quad = mesh_load((uint8_t *)vertices, sizeof(vertices), 5 * sizeof(float), indices, sizeof(indices));
+    mesh_set_vertex_attribute(quad, 0, 0);
+    mesh_set_vertex_attribute(quad, 2, 3 * sizeof(float));
 
-    Mesh quad = mesh_load(vertices, sizeof(vertices), indices, sizeof(indices));
-
-    Material material = material_load_from_files(
-        "assets/shaders/basic.vert", "assets/shaders/basic.frag"
-    );
+    Material material = material_load_from_files("assets/shaders/basic.vert", "assets/shaders/basic.frag");
 
     mat4 model;
     glm_mat4_identity(model);
@@ -47,7 +48,7 @@ Node node_create() {
 }
 
 void node_delete(Node *node) {
-    mesh_unload(node->mesh);
+    mesh_delete(node->mesh);
     material_unload(node->material);
 }
 
