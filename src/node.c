@@ -49,8 +49,8 @@ Node node_create_grid(float width, float height, int32_t subdivision_x, int32_t 
         for (int j = 0; j < subdivision_x + 2; ++j) {
             int32_t vi = i * (subdivision_x + 2) + j;
             vertices[vi] = (Vertex){
-                .position = {(float)j * quad_width, (float)i * quad_height, 0.0f},
-                .normal = {0.0f, 0.0f, 1.0f},
+                .position = {(float)j * quad_width, 0.0f, (float)i * quad_height},
+                .normal = {0.0f, 1.0f, 0.0f},
                 .uv = {(float)j * quad_width / width, (float)i * quad_height / height},
             };
         }
@@ -58,7 +58,8 @@ Node node_create_grid(float width, float height, int32_t subdivision_x, int32_t 
 
     // Generate indices
     int32_t index_count = 0;
-    uint32_t *indices = MALLOC(index_count * sizeof(float));
+//    uint32_t *indices = MALLOC(index_count * sizeof(float));
+    uint32_t  *indices = NULL;
 
     // Load mesh
     Mesh grid = mesh_load(vertices, vertex_count, indices, index_count);
@@ -71,7 +72,7 @@ Node node_create_grid(float width, float height, int32_t subdivision_x, int32_t 
     grid.indices = indices;
     grid.index_count = index_count;
 
-    Material material = material_load_from_files("assets/shaders/basic.vert", "assets/shaders/basic.frag");
+    Material material = material_load_from_files("assets/shaders/grid_test.vert", "assets/shaders/grid_test.frag");
 
     mat4 model;
     glm_mat4_identity(model);

@@ -101,6 +101,10 @@ Shader shader_load_from_files(const char *vertex_source_file, const char *fragme
     return shader_setup(program_handle);
 }
 
+/// Load shader source, create and return a Material
+/// \param vertex_source_file Vertex shader source file
+/// \param fragment_source_file Fragment shader source file
+/// \return struct Material
 Material material_load_from_files(const char *vertex_source_file, const char *fragment_source_file) {
     Material result = {
         .shader = shader_load_from_files(vertex_source_file, fragment_source_file),

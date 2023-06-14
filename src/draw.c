@@ -19,6 +19,7 @@ void draw_mesh_wireframe(Mesh mesh, mat4 model, mat4 view, mat4 projection, Mate
 
     // Old version of doing wireframe rendering
     glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-    glDrawElements(GL_TRIANGLES, mesh.index_count, GL_UNSIGNED_INT, 0);
+//    glDrawElements(GL_TRIANGLES, mesh.index_count, GL_UNSIGNED_INT, 0);
+    glDrawArrays(GL_POINTS, 0, mesh.vertex_count);
     glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 }
