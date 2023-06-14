@@ -7,20 +7,26 @@
 
 #include <stdint.h>
 #include <stdbool.h>
+#include "cglm/cglm.h"
+
+typedef struct Vertex {
+    vec3 position;
+    vec3 normal;
+    vec2 uv;
+} Vertex;
 
 typedef struct Mesh {
-  uint8_t *vertex_data;
-  size_t vertex_data_size;
-  uint32_t *index_data;
-  size_t index_data_size;
+  Vertex *vertices;
+  size_t vertex_count;
+  uint32_t *indices;
+  int32_t index_count;
 
   uint32_t vao;
   uint32_t buffers[2];
-  int32_t index_count;
 } Mesh;
 
 /// Load a mesh on the GPU
-Mesh mesh_load(uint8_t *vertices, int64_t vertices_size, int32_t vertex_size, uint32_t *indices, int64_t indices_size);
+Mesh mesh_load(Vertex *vertices, int32_t vertex_count, uint32_t *indices, int32_t index_count);
 
 /// Set a vertex attribute by specifying at which layout location it is going to be accessed and the data offset from
 ///  the start of each vertex.

@@ -9,18 +9,18 @@
 
 
 Node node_create_quad() {
-    float vertices[20] = {
-        -1.0f,  1.0f,  0.0f,  0.0f,  1.0f,
-        -1.0f, -1.0f,  0.0f,  0.0f,  0.0f,
-         1.0f, -1.0f,  0.0f,  1.0f,  0.0f,
-         1.0f,  1.0f,  0.0f,  1.0f,  1.0f,
+    Vertex vertices[4] = {
+        {{-1.0f, 1.0f, 0.0f}, {0.0f, 0.0f, -1.0f}, {0.0f, 1.0f}},
+        {{-1.0f, -1.0f, 0.0f}, {0.0f, 0.0f, -1.0f}, {0.0f, 0.0f}},
+        {{1.0f, -1.0f, 0.0f}, {0.0f, 0.0f, -1.0f}, {1.0f, 0.0f}},
+        {{1.0f, 1.0f, 0.0f}, {0.0f, 0.0f, -1.0f}, {1.0f, 1.0f}},
     };
 
     uint32_t indices[6] = {
         0, 1, 2, 2, 3, 0,
     };
 
-    Mesh quad = mesh_load((uint8_t *)vertices, sizeof(vertices), 5 * sizeof(float), indices, sizeof(indices));
+    Mesh quad = mesh_load(vertices, 4, indices, 6);
     mesh_set_vertex_attribute(quad, 0, 0);
     mesh_set_vertex_attribute(quad, 2, 3 * sizeof(float));
 
@@ -38,27 +38,37 @@ Node node_create_quad() {
     return node;
 }
 
-Node node_create_grid(float width, float depth, uint32_t subdivision_x, uint32_t subdivision_y) {
+Node node_create_grid(float width, float height, int32_t subdivision_x, int32_t subdivision_y) {
     // Generate vertices
-    int32_t vertex_size = 3 * sizeof(float);
-    int64_t vertex_data_size = (subdivision_x + 1) * (subdivision_y + 1) * (int64_t)sizeof(float) * 3;
-    float *vertex_data = MALLOC(vertex_data_size);
+    float quad_width = width / (float)(subdivision_x + 1);
+    float quad_height = height / (float)(subdivision_y + 1);
+
+    int32_t vertex_count = (subdivision_x + 2) * (subdivision_y + 2);
+    Vertex *vertices = MALLOC(vertex_count * sizeof(Vertex));
+    for (int i = 0; i < subdivision_y + 2; ++i) {
+        for (int j = 0; j < subdivision_x + 2; ++j) {
+            int32_t vi = i * (subdivision_x + 2) + j;
+            vertices[vi] = (Vertex){
+                .position = {(float)j * quad_width, (float)i * quad_height, 0.0f},
+                .normal = {0.0f, 0.0f, 1.0f},
+                .uv = {(float)j * quad_width / width, (float)i * quad_height / height},
+            };
+        }
+    }
 
     // Generate indices
     int32_t index_count = 0;
-    int64_t index_data_size = 0;
-    uint32_t *index_data = MALLOC(index_data_size);
+    uint32_t *indices = MALLOC(index_count * sizeof(float));
 
     // Load mesh
-    Mesh grid = mesh_load((uint8_t *)vertex_data, vertex_data_size, vertex_size, index_data, index_data_size);
+    Mesh grid = mesh_load(vertices, vertex_count, indices, index_count);
     mesh_set_vertex_attribute(grid, 0, 0);
     mesh_set_vertex_attribute(grid, 2, 3 * sizeof(float));
 
     // Explicitly passing buffer ownership to the mesh struct
-    grid.vertex_data = (uint8_t*)vertex_data;
-    grid.vertex_data_size = vertex_size;
-    grid.index_data = index_data;
-    grid.index_data_size = index_data_size;
+    grid.vertices = vertices;
+    grid.vertex_count = vertex_count;
+    grid.indices = indices;
     grid.index_count = index_count;
 
     Material material = material_load_from_files("assets/shaders/basic.vert", "assets/shaders/basic.frag");

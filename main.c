@@ -17,7 +17,7 @@ int main() {
     Node quad = node_create_quad();
     Node grid = node_create_grid(5.0f, 5.0f, 4, 4);
 
-    Terrain terrain = terrain_load_from_png("assets/textures/heightmap.png");
+//    Terrain terrain = terrain_load_from_png("assets/textures/heightmap.png");
 
     while (!viewport_is_closing(viewport)) {
         viewport_process_events(viewport);
@@ -33,7 +33,8 @@ int main() {
     }
 
     node_delete(&quad);
-    terrain_delete(terrain);
+    node_delete(&grid);
+//    terrain_delete(terrain);
 
     viewport_delete(viewport);
 

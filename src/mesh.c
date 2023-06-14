@@ -6,28 +6,27 @@
 #include "memory.h"
 #include "glad/gl.h"
 
-Mesh mesh_load(uint8_t *vertices, int64_t vertices_size, int32_t vertex_size, uint32_t *indices, int64_t indices_size) {
+Mesh mesh_load(Vertex *vertices, int32_t vertex_count, uint32_t *indices, int32_t index_count) {
     GLuint buffers[2];
     glCreateBuffers(2, buffers);
 
     glBindBuffer(GL_ARRAY_BUFFER, buffers[0]);
-    glBufferData(GL_ARRAY_BUFFER, vertices_size, vertices, GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, (int64_t)(vertex_count * sizeof(Vertex)), vertices, GL_STATIC_DRAW);
     GLintptr base_offset = 0;
-    GLsizei relative_offset = 0;
 
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, buffers[1]);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices_size, indices, GL_STATIC_DRAW);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, (int64_t)(index_count * sizeof(float)), indices, GL_STATIC_DRAW);
 
     GLuint vao;
     glCreateVertexArrays(1, &vao);
-    glVertexArrayVertexBuffer(vao, 0, buffers[0], base_offset, vertex_size); // Bind a buffer to binding point 0
+    glVertexArrayVertexBuffer(vao, 0, buffers[0], base_offset, sizeof(Vertex)); // Bind a buffer to binding point 0
     glVertexArrayElementBuffer(vao, buffers[1]);
 
-    Mesh mesh = {
-        .vao = vao,
-        .buffers = {buffers[0], buffers[1]},
-        .index_count = (int32_t)(indices_size / sizeof(uint32_t)),
-    };
+    Mesh mesh = {0};
+    mesh.vao = vao;
+    mesh.buffers[0] = buffers[0];
+    mesh.buffers[1] = buffers[1];
+    mesh.index_count = index_count;
 
     return mesh;
 }
@@ -50,6 +49,6 @@ void mesh_unload(Mesh mesh) {
 
 void mesh_delete(Mesh mesh) {
     mesh_unload(mesh);
-    if (mesh.vertex_data) FREE(mesh.vertex_data);
-    if (mesh.index_data) FREE(mesh.index_data);
+    if (mesh.vertices) FREE(mesh.vertices);
+    if (mesh.indices) FREE(mesh.indices);
 }
