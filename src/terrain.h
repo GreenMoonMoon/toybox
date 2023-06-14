@@ -5,9 +5,12 @@
 #ifndef TOYBOX_SRC_GEOMETRY_TERRAIN_H_
 #define TOYBOX_SRC_GEOMETRY_TERRAIN_H_
 
+struct Mesh;
+
 typedef struct Terrain {
   float *heightmap;
   size_t size;
+  struct Mesh *mesh;
 } Terrain;
 
 

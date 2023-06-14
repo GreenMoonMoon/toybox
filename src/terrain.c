@@ -7,6 +7,7 @@
 #include <stdio.h>
 #include "io/file.h"
 #include "types/array_2d.h"
+#include "mesh.h"
 #include "cglm/cglm.h"
 
 Terrain terrain_load_from_png(const char *filename) {
@@ -24,6 +25,9 @@ Terrain terrain_load_from_png(const char *filename) {
     }
     terrain.size = (uint32_t)sqrt((double)file_size);
     FREE(buffer);
+
+
+
     return terrain;
 }
 

@@ -2,7 +2,7 @@
 // Created by josue on 2023-01-30.
 //
 
-#include "graphic/camera.h"
+#include "camera.h"
 
 #include "cglm/cglm.h"
 

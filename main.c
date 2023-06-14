@@ -1,8 +1,8 @@
 #include <stdlib.h>
 
-#include "graphic/viewport.h"
-#include "scene/node.h"
-#include "geometry/terrain.h"
+#include "viewport.h"
+#include "node.h"
+#include "terrain.h"
 
 Viewport *viewport;
 

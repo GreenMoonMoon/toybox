@@ -4,7 +4,7 @@
 
 #include "node.h"
 #include <stdint.h>
-#include "graphic/draw.h"
+#include "draw.h"
 
 
 Node node_create() {

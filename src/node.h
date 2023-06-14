@@ -5,8 +5,8 @@
 #ifndef TOYBOX_SRC_SCENE_NODE_H_
 #define TOYBOX_SRC_SCENE_NODE_H_
 
-#include "graphic/mesh.h"
-#include "graphic/material.h"
+#include "mesh.h"
+#include "material.h"
 #include "cglm/cglm.h"
 
 typedef struct Node {

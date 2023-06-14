@@ -31,14 +31,14 @@ set(extern_SOURCES extern/glad/src/gl.c)
 add_executable(toybox)
 target_sources(toybox PRIVATE
         main.c
-        src/graphic/viewport.c
-        src/graphic/draw.c
-        src/graphic/mesh.c
-        src/graphic/material.c
+        src/viewport.c
+        src/draw.c
+        src/mesh.c
+        src/material.c
         src/io/file.c
-        src/scene/node.c
+        src/node.c
 
-        src/geometry/terrain.c
+        src/terrain.c
 
         ${extern_SOURCES})
 target_include_directories(toybox PRIVATE src)
