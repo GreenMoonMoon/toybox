@@ -5,6 +5,7 @@
 #include "camera.h"
 #include "draw.h"
 #include "terrain.h"
+#include "inputs.h"
 
 Viewport *viewport;
 
@@ -23,10 +24,18 @@ int main() {
     Material material = material_load_from_files("assets/shaders/grid_test.vert", "assets/shaders/grid_test.frag");
 
     while (!viewport_is_closing(viewport)) {
-        viewport_process_events(viewport);
+        viewport_start_frame(viewport);
         double delta_time = viewport_get_delta_time(viewport);
 
-        viewport_start_frame();
+        vec3 move_input = {
+            input_get_horizontal_axis(),
+            0.0f,
+            input_get_vertical_axis()
+        };
+        glm_vec3_normalize(move_input);
+        glm_vec3_scale(move_input, delta_time * 5.0f, move_input);
+
+        glm_translate(camera.transform, move_input);
 
 //        node_draw(&quad, &camera);
 //        node_draw_wireframe(&quad, &camera);

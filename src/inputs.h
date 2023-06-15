@@ -7,6 +7,8 @@
 
 #include <stdint.h>
 
+float input_get_horizontal_axis();
 
+float input_get_vertical_axis();
 
 #endif //SUPERMARIO_INPUTS_H

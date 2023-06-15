@@ -91,7 +91,9 @@ double viewport_get_delta_time(Viewport *viewport) {
     return delta_time;
 }
 
-void viewport_start_frame() {
+void viewport_start_frame(Viewport *viewport) {
+    viewport_process_events(viewport);
+
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
 
