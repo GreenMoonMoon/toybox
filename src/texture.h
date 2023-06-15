@@ -8,10 +8,12 @@
 #include <stdint.h>
 
 typedef struct Texture {
-    uint32_t handle;
+    uint32_t texture_handle;
+    uint32_t sampler_handle;
 } Texture;
 
-Texture load_texture_from_file(const char *filename);
-void texture_enable(Texture texture);
+Texture load_texture_from_png(const char *filename);
+void texture_unload(Texture texture);
+void texture_enable(Texture texture, int32_t unit);
 
 #endif //TOYBOX_SRC_TEXTURE_H_

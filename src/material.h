@@ -8,6 +8,8 @@
 #include "glad/gl.h"
 #include "cglm/cglm.h"
 
+struct Texture;
+
 typedef struct Shader {
     uint32_t handle;
     // Uniform locations
@@ -19,6 +21,7 @@ typedef struct Shader {
     int32_t light_source_loc;
     int32_t light_intensity_loc;
     int32_t diffuse_reflectivity_loc;
+    int32_t albedo_loc;
 } Shader;
 
 typedef struct Material {
@@ -34,6 +37,8 @@ Material load_material_from_files(const char *vertex_source_file, const char *fr
 void material_enable(Material material);
 
 void material_set_mvp(Material material, mat4 model, mat4 view, mat4 projection);
+
+void material_set_albedo(Material material, struct Texture *texture);
 
 void material_unload(Material material);
 

@@ -13,7 +13,7 @@ Terrain load_terrain_from_png(const char *filename, float world_scale) {
     // TODO: there should be a way to avoid create a transient buffer and pass a transform function to manipulate
     //  the file data directly while copying them in the final buffer.
     uint8_t *buffer;
-    size_t file_size = read_png_file(filename, &buffer);
+    size_t file_size = read_png_file_r(filename, &buffer);
 
     assert(file_size != 0);
     assert(file_size % sizeof(uint8_t) == 0);

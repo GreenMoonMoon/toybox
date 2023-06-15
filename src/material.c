@@ -3,6 +3,7 @@
 //
 #include "material.h"
 #include <stdarg.h>
+#include "texture.h"
 #include "memory.h"
 #include "io/file.h"
 
@@ -84,6 +85,7 @@ Shader setup_shader(uint32_t program_handle) {
             .light_source_loc = glGetUniformLocation(program_handle, "lightSource"),
             .light_intensity_loc = glGetUniformLocation(program_handle, "lightIntensity"),
             .diffuse_reflectivity_loc = glGetUniformLocation(program_handle, "diffuseReflectivity"),
+            .albedo_loc = glGetUniformLocation(program_handle, "tAlbedo"),
     };
 }
 
@@ -129,6 +131,11 @@ void material_set_mvp(Material material, mat4 model, mat4 view, mat4 projection)
 
     glm_mat4_mul(projection, mvp, mvp);
     glUniformMatrix4fv(material.shader.mvp_loc, 1, GL_FALSE, (float *) mvp);
+}
+
+void material_set_albedo(Material material, struct Texture *texture) {
+    texture_enable(*texture, 0);
+    glUniform1i(material.shader.albedo_loc, 0);
 }
 
 void material_unload(Material material) {

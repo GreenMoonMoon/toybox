@@ -35,7 +35,23 @@ size_t read_file(const char* filename, char **buffer) {
     return file_size + 1;
 }
 
-size_t read_png_file(const char *filename, uint8_t **buffer) {
+size_t read_png_file(const char *filename, uint8_t **buffer, int32_t *width, int32_t *height) {
+    int32_t x, y, n;
+    size_t buffer_size = 0;
+    uint8_t *data = stbi_load(filename, &x, &y, &n, 4);
+    if (data != NULL){
+        buffer_size = x * y * 4; // width * height * channel
+        *buffer = MALLOC(buffer_size);
+        memcpy_s(*buffer, buffer_size, data, buffer_size);
+    }
+    stbi_image_free(data);
+
+    *width = x;
+    *height = y;
+    return buffer_size;
+}
+
+size_t read_png_file_r(const char *filename, uint8_t **buffer) {
     int32_t x, y, n;
     size_t file_size = 0;
     uint8_t *data = stbi_load(filename, &x, &y, &n, 1);
