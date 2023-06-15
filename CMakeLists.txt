@@ -40,6 +40,7 @@ target_sources(toybox PRIVATE
         src/camera.c
         src/inputs.c
         src/terrain.c
+        src/texture.c
 
         ${extern_SOURCES})
 target_include_directories(toybox PRIVATE src)

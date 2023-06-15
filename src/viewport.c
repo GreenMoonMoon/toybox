@@ -16,7 +16,7 @@ struct Viewport {
   uint64_t last_frame_time;
 };
 
-void viewport_init(uint32_t width, uint32_t height, const char *name, struct Viewport **viewport) {
+void viewport_init(struct Viewport **viewport, uint32_t width, uint32_t height, const char *name) {
     SDL_Init(SDL_INIT_VIDEO);
 
     SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
@@ -95,7 +95,7 @@ void viewport_start_frame(Viewport *viewport) {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
 
-void viewport_set_clear_color(float r, float g, float b, float a) {
+void set_clear_color(float r, float g, float b, float a) {
     glClearColor(r, g, b, a);
 }
 

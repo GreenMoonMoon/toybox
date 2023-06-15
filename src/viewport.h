@@ -10,7 +10,7 @@
 
 typedef struct Viewport Viewport;
 
-void viewport_init(uint32_t width, uint32_t height, const char *name, Viewport **viewport);
+void viewport_init(Viewport **viewport, uint32_t width, uint32_t height, const char *name);
 void viewport_delete(Viewport *viewport);
 
 bool viewport_is_closing(Viewport *viewport);
@@ -20,6 +20,6 @@ void viewport_process_events(Viewport *viewport);
 double viewport_get_delta_time(Viewport *viewport);
 void viewport_start_frame(Viewport *viewport);
 void viewport_end_frame(Viewport *viewport);
-void viewport_set_clear_color(float r, float g, float b, float a);
+void set_clear_color(float r, float g, float b, float a);
 
 #endif //TOYBOX_SRC_VIEWPORT_H_

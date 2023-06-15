@@ -14,15 +14,15 @@ Camera debug_camera;
 const float camera_speed = 7.5f;
 
 void debug_camera_init(void){
-    debug_camera = camera_create_perspective(4.0f/3.0f, (vec3){-5.0f, -2.5f, -8.0f}, 1.5f, 0.1f, 100.0f);
+    debug_camera = create_perspective_camera(4.0f / 3.0f, (vec3) {-5.0f, -2.5f, -8.0f}, 1.5f, 0.1f, 100.0f);
     glm_rotate_x(debug_camera.transform, 0.2f, debug_camera.transform);
 }
 
 void debug_camera_update(double delta_time){
     vec3 move_input = {
-        input_get_horizontal_axis(),
+        get_horizontal_input_axis(),
         0.0f,
-        input_get_vertical_axis()
+        get_vertical_input_axis()
     };
     glm_vec3_normalize(move_input);
     glm_vec3_scale(move_input, delta_time * camera_speed, move_input);

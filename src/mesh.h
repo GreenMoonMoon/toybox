@@ -26,7 +26,7 @@ typedef struct Mesh {
 } Mesh;
 
 /// Load a mesh on the GPU
-Mesh mesh_load(const Vertex *vertices, int32_t vertex_count, const uint32_t *indices, int32_t index_count);
+Mesh load_mesh(const Vertex *vertices, int32_t vertex_count, const uint32_t *indices, int32_t index_count);
 
 /// Set a vertex attribute by specifying at which layout location it is going to be accessed and the data offset from
 ///  the start of each vertex.

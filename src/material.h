@@ -25,11 +25,11 @@ typedef struct Material {
     Shader shader;
 } Material;
 
-Shader shader_setup(uint32_t program_handle);
+Shader setup_shader(uint32_t program_handle);
 
-Shader shader_load_from_files(const char* vertex_source_file, const char* fragment_source_file);
+Shader load_shader_from_file(const char* vertex_source_file, const char* fragment_source_file);
 
-Material material_load_from_files(const char *vertex_source_file, const char *fragment_source_file);
+Material load_material_from_files(const char *vertex_source_file, const char *fragment_source_file);
 
 void material_enable(Material material);
 

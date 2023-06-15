@@ -7,7 +7,7 @@
 #include "memory.h"
 #include "glad/gl.h"
 
-Mesh mesh_load(const Vertex *vertices, int32_t vertex_count, const uint32_t *indices, int32_t index_count) {
+Mesh load_mesh(const Vertex *vertices, int32_t vertex_count, const uint32_t *indices, int32_t index_count) {
     GLuint buffers[2];
     glCreateBuffers(2, buffers);
 
@@ -58,7 +58,7 @@ Mesh create_primitive(const Vertex *vertices, size_t vertices_size, const uint32
     uint32_t vertex_count = vertices_size / sizeof(Vertex);
     uint32_t index_count = indices_size / sizeof(uint32_t);
 
-    Mesh mesh = mesh_load(vertices, vertex_count, indices, index_count);
+    Mesh mesh = load_mesh(vertices, vertex_count, indices, index_count);
     mesh_set_vertex_attribute(mesh, 0, 0);
     mesh_set_vertex_attribute(mesh, 2, 3 * sizeof(float));
 
@@ -153,7 +153,7 @@ Mesh create_grid_mesh(float width, float depth, int32_t subdivision_x, int32_t s
     }
 
     // Load mesh
-    Mesh grid = mesh_load(vertices, vertex_count, indices, index_count);
+    Mesh grid = load_mesh(vertices, vertex_count, indices, index_count);
     mesh_set_vertex_attribute(grid, 0, 0);
     mesh_set_vertex_attribute(grid, 2, 3 * sizeof(float));
 

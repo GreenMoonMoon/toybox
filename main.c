@@ -10,9 +10,9 @@
 Viewport *viewport;
 
 int main() {
-    viewport_init(800, 600, "Main", &viewport);
+    viewport_init(&viewport, 800, 600, "Main");
 
-    viewport_set_clear_color(0.1f, 0.1f, 0.1f, 1.0f);
+    set_clear_color(0.1f, 0.1f, 0.1f, 1.0f);
 
     debug_camera_init();
 
@@ -20,7 +20,7 @@ int main() {
 //    Terrain terrain = terrain_load_from_png("assets/textures/simple_test.png", 8.0f);
 
 //    Material material = material_load_from_files("assets/shaders/grid_test.vert", "assets/shaders/grid_test.frag");
-    Material material = material_load_from_files("assets/shaders/basic.vert", "assets/shaders/basic.frag");
+    Material material = load_material_from_files("assets/shaders/basic.vert", "assets/shaders/basic.frag");
 
     while (!viewport_is_closing(viewport)) {
         viewport_process_events(viewport);

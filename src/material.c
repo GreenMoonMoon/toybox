@@ -73,7 +73,7 @@ GLuint build_program(int count, ...) {
     return program;
 }
 
-Shader shader_setup(uint32_t program_handle) {
+Shader setup_shader(uint32_t program_handle) {
     return (Shader) {
             .handle = program_handle,
             .view_loc = glGetUniformLocation(program_handle, "view"),
@@ -87,7 +87,7 @@ Shader shader_setup(uint32_t program_handle) {
     };
 }
 
-Shader shader_load_from_files(const char *vertex_source_file, const char *fragment_source_file) {
+Shader load_shader_from_file(const char *vertex_source_file, const char *fragment_source_file) {
     char *vertex_source;
     read_file(vertex_source_file, &vertex_source);
     GLuint vertex_handle = compile_shader(vertex_source, GL_VERTEX_SHADER);
@@ -98,16 +98,16 @@ Shader shader_load_from_files(const char *vertex_source_file, const char *fragme
 
     GLuint program_handle = build_program(2, vertex_handle, fragment_handle);
 
-    return shader_setup(program_handle);
+    return setup_shader(program_handle);
 }
 
 /// Load shader source, create and return a Material
 /// \param vertex_source_file Vertex shader source file
 /// \param fragment_source_file Fragment shader source file
 /// \return struct Material
-Material material_load_from_files(const char *vertex_source_file, const char *fragment_source_file) {
+Material load_material_from_files(const char *vertex_source_file, const char *fragment_source_file) {
     Material result = {
-        .shader = shader_load_from_files(vertex_source_file, fragment_source_file),
+        .shader = load_shader_from_file(vertex_source_file, fragment_source_file),
     };
 
     return result;

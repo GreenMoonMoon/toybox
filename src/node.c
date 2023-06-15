@@ -9,10 +9,10 @@
 #include "memory.h"
 
 
-Node node_create_quad() {
+Node create_quad_node() {
     Mesh quad = create_quad_mesh(1.0f, 1.0f);
 
-    Material material = material_load_from_files("assets/shaders/basic.vert", "assets/shaders/basic.frag");
+    Material material = load_material_from_files("assets/shaders/basic.vert", "assets/shaders/basic.frag");
 
     mat4 model;
     glm_mat4_identity(model);
@@ -26,10 +26,10 @@ Node node_create_quad() {
     return node;
 }
 
-Node node_create_grid(float width, float height, int32_t subdivision_x, int32_t subdivision_y) {
+Node create_grid_node(float width, float height, int32_t subdivision_x, int32_t subdivision_y) {
     Mesh grid = create_grid_mesh(width, height, subdivision_x, subdivision_y);
 
-    Material material = material_load_from_files("assets/shaders/grid_test.vert", "assets/shaders/grid_test.frag");
+    Material material = load_material_from_files("assets/shaders/grid_test.vert", "assets/shaders/grid_test.frag");
 
     mat4 model;
     glm_mat4_identity(model);

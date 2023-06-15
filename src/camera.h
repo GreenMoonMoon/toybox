@@ -19,6 +19,6 @@ typedef struct Camera {
 /// \param near Near clip plane
 /// \param far Far clip plane
 /// \return struct Camera
-Camera camera_create_perspective(float aspect_ratio, vec3 position, float fov, float near, float far);
+Camera create_perspective_camera(float aspect_ratio, vec3 position, float fov, float near, float far);
 
 #endif //SUPERMARIO_CAMERA_H

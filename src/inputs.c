@@ -5,12 +5,12 @@
 #include "inputs.h"
 #include "SDL.h"
 
-float input_get_horizontal_axis() {
+float get_horizontal_input_axis() {
     const uint8_t *state = SDL_GetKeyboardState(NULL);
     return (float)state[SDL_SCANCODE_A] - (float)state[SDL_SCANCODE_D];
 }
 
-float input_get_vertical_axis() {
+float get_vertical_input_axis() {
     const uint8_t *state = SDL_GetKeyboardState(NULL);
     return (float)state[SDL_SCANCODE_W] - (float)state[SDL_SCANCODE_S];
 }
