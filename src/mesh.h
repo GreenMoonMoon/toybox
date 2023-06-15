@@ -26,7 +26,7 @@ typedef struct Mesh {
 } Mesh;
 
 /// Load a mesh on the GPU
-Mesh mesh_load(Vertex *vertices, int32_t vertex_count, uint32_t *indices, int32_t index_count);
+Mesh mesh_load(const Vertex *vertices, int32_t vertex_count, const uint32_t *indices, int32_t index_count);
 
 /// Set a vertex attribute by specifying at which layout location it is going to be accessed and the data offset from
 ///  the start of each vertex.
@@ -41,6 +41,8 @@ void mesh_unload(Mesh mesh);
 /// Unload a mesh from the GPU and delete local data
 void mesh_delete(Mesh mesh);
 
-Mesh create_grid_mesh(float width, float height, int32_t subdivision_x, int32_t subdivision_y);
+Mesh create_quad_mesh(float width, float height);
+Mesh create_cube_mesh(float width, float height, float depth);
+Mesh create_grid_mesh(float width, float depth, int32_t subdivision_x, int32_t subdivision_y);
 
 #endif //SUPERMARIO_GPU_H

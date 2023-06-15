@@ -10,20 +10,7 @@
 
 
 Node node_create_quad() {
-    Vertex vertices[4] = {
-        {{-1.0f, 1.0f, 0.0f}, {0.0f, 0.0f, -1.0f}, {0.0f, 1.0f}},
-        {{-1.0f, -1.0f, 0.0f}, {0.0f, 0.0f, -1.0f}, {0.0f, 0.0f}},
-        {{1.0f, -1.0f, 0.0f}, {0.0f, 0.0f, -1.0f}, {1.0f, 0.0f}},
-        {{1.0f, 1.0f, 0.0f}, {0.0f, 0.0f, -1.0f}, {1.0f, 1.0f}},
-    };
-
-    uint32_t indices[6] = {
-        0, 1, 2, 2, 3, 0,
-    };
-
-    Mesh quad = mesh_load(vertices, 4, indices, 6);
-    mesh_set_vertex_attribute(quad, 0, 0);
-    mesh_set_vertex_attribute(quad, 2, 3 * sizeof(float));
+    Mesh quad = create_quad_mesh(1.0f, 1.0f);
 
     Material material = material_load_from_files("assets/shaders/basic.vert", "assets/shaders/basic.frag");
 
