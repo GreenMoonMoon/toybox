@@ -2,10 +2,10 @@
 
 #include "viewport.h"
 #include "node.h"
-#include "camera.h"
 #include "draw.h"
 #include "terrain.h"
 #include "inputs.h"
+#include "behavior/debug_camera.h"
 
 Viewport *viewport;
 
@@ -14,8 +14,8 @@ int main() {
 
     viewport_set_clear_color(0.1f, 0.1f, 0.1f, 1.0f);
 
-    Camera camera = camera_create_perspective(4.0f/3.0f, (vec3){-6.2f, 0.75f, -35.0f}, 75.0f, 0.1f, 100.0f);
-    glm_rotate_x(camera.transform, -0.25f, camera.transform);
+    debug_camera_init();
+
 
 //    Node quad = node_create_quad();
 //    Node grid = node_create_grid(5.0f, 5.0f, 4, 4);
@@ -27,20 +27,12 @@ int main() {
         viewport_start_frame(viewport);
         double delta_time = viewport_get_delta_time(viewport);
 
-        vec3 move_input = {
-            input_get_horizontal_axis(),
-            0.0f,
-            input_get_vertical_axis()
-        };
-        glm_vec3_normalize(move_input);
-        glm_vec3_scale(move_input, delta_time * 5.0f, move_input);
-
-        glm_translate(camera.transform, move_input);
+        debug_camera_update(delta_time);
 
 //        node_draw(&quad, &camera);
 //        node_draw_wireframe(&quad, &camera);
 //        node_draw_wireframe(&grid, &camera);
-        draw_mesh_wireframe(terrain.mesh, GLM_MAT4_IDENTITY, camera.transform, camera.projection, material);
+        draw_mesh_wireframe(terrain.mesh, GLM_MAT4_IDENTITY, debug_camera.transform, debug_camera.projection, material);
 
         viewport_end_frame(viewport);
     }

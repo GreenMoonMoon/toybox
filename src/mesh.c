@@ -60,22 +60,40 @@ Mesh create_grid_mesh(float width, float height, int32_t subdivision_x, int32_t 
 
     int32_t vertex_count = (subdivision_x + 2) * (subdivision_y + 2);
     Vertex *vertices = MALLOC(vertex_count * sizeof(Vertex));
-    for (int i = 0; i < subdivision_y + 2; ++i) {
-        for (int j = 0; j < subdivision_x + 2; ++j) {
-            int32_t vi = i * (subdivision_x + 2) + j;
+    for (int y = 0; y < subdivision_y + 2; ++y) {
+        for (int x = 0; x < subdivision_x + 2; ++x) {
+            int32_t vi = y * (subdivision_x + 2) + x;
             vertices[vi] = (Vertex){
-                .position = {(float)j * quad_width, 0.0f, (float)i * quad_height},
+                .position = {(float)x * quad_width, 0.0f, (float)y * quad_height},
                 .normal = {0.0f, 1.0f, 0.0f},
-                .uv = {(float)j * quad_width / width, (float)i * quad_height / height},
+                .uv = {(float)x * quad_width / width, (float)y * quad_height / height},
             };
         }
     }
 
     // Generate indices
-    int32_t index_count = 0;
-//    uint32_t *indices = MALLOC(index_count * sizeof(float));
-    uint32_t  *indices = NULL;
+    int32_t index_count = ((subdivision_x + 1 ) * (subdivision_y + 1)) * 6;
+    uint32_t *indices = MALLOC(index_count * sizeof(uint32_t));
+    uint32_t index = 0;
+    for (int y = 0; y < subdivision_y + 1; ++y) {
+        for (int x = 0; x < subdivision_x + 1; ++x) {
+            uint32_t bl = y * (subdivision_x + 2 ) + x;          // bottom left
+            uint32_t tl = (y + 1) * (subdivision_x + 2) + x;     // top left
+            uint32_t br = y * (subdivision_x + 2 ) + x + 1;      // bottom right
+            uint32_t tr = (y + 1) * (subdivision_x + 2) + x + 1; // top right
 
+            // first quad triangle
+            indices[index++] = bl;
+            indices[index++] = br;
+            indices[index++] = tl;
+
+            // second quad triangle
+            indices[index++] = tl;
+            indices[index++] = tr;
+            indices[index++] = br;
+        }
+    }
+    
     // Load mesh
     Mesh grid = mesh_load(vertices, vertex_count, indices, index_count);
     mesh_set_vertex_attribute(grid, 0, 0);
