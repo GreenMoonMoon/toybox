@@ -6,6 +6,7 @@
 #define TOYBOX_SRC_TEXTURE_H_
 
 #include <stdint.h>
+#include <stdbool.h>
 
 typedef struct Texture {
     uint32_t texture_handle;

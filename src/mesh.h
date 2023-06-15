@@ -32,8 +32,9 @@ Mesh load_mesh(const Vertex *vertices, int32_t vertex_count, const uint32_t *ind
 ///  the start of each vertex.
 /// \param mesh Input mesh
 /// \param attribute_index Index corresponding to the shader layout attribute
+/// \param attribute_dimension Attribute dimension. Between 1 and 4 (ex: vec3 is 3)
 /// \param offset Relative offset from the start of a vertex data structure
-void mesh_set_vertex_attribute(Mesh mesh, uint32_t attribute_index, int32_t offset);
+void mesh_set_vertex_attribute(Mesh mesh, uint32_t attribute_index, int32_t attribute_dimension, int32_t offset);
 
 /// Unload a mesh from the gpu but doesn't delete the local data.
 void mesh_unload(Mesh mesh);

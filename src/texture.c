@@ -36,6 +36,7 @@ void texture_unload(Texture texture) {
 }
 
 void texture_enable(Texture texture, int32_t unit) {
+    //TODO: check if this operation is superfluous or costly. Tracking which texture is active internally might alleviate some cost.
     glActiveTexture(GL_TEXTURE0 + unit);
     glBindTexture(GL_TEXTURE_2D, texture.texture_handle);
 }

@@ -32,9 +32,9 @@ Mesh load_mesh(const Vertex *vertices, int32_t vertex_count, const uint32_t *ind
     return mesh;
 }
 
-void mesh_set_vertex_attribute(Mesh mesh, uint32_t attribute_index, int32_t offset) {
+void mesh_set_vertex_attribute(Mesh mesh, uint32_t attribute_index, int32_t attribute_dimension, int32_t offset) {
     glEnableVertexArrayAttrib(mesh.vao, attribute_index);
-    glVertexArrayAttribFormat(mesh.vao, attribute_index, 3, GL_FLOAT, GL_FALSE, offset);
+    glVertexArrayAttribFormat(mesh.vao, attribute_index, attribute_dimension, GL_FLOAT, GL_FALSE, offset);
     glVertexArrayAttribBinding(mesh.vao, attribute_index, 0); // Bind attribute location to binding point
 }
 
@@ -59,8 +59,8 @@ Mesh create_primitive(const Vertex *vertices, size_t vertices_size, const uint32
     uint32_t index_count = indices_size / sizeof(uint32_t);
 
     Mesh mesh = load_mesh(vertices, vertex_count, indices, index_count);
-    mesh_set_vertex_attribute(mesh, 0, 0);
-    mesh_set_vertex_attribute(mesh, 2, 3 * sizeof(float));
+    mesh_set_vertex_attribute(mesh, 0, 3, offsetof(Vertex, position));
+    mesh_set_vertex_attribute(mesh, 2, 2, offsetof(Vertex, uv));
 
     mesh.vertices = MALLOC(vertices_size);
     memcpy_s(mesh.vertices, vertices_size, vertices, vertices_size);
@@ -115,6 +115,8 @@ Mesh create_grid_mesh(float width, float depth, int32_t subdivision_x, int32_t s
     // Generate vertices
     float quad_width = width / (float)(subdivision_x + 1);
     float quad_height = depth / (float)(subdivision_y + 1);
+    float uv_factor_x = 1.0f / (float)(subdivision_x + 2);
+    float uv_factor_y = 1.0f / (float)(subdivision_y + 2);
 
     int32_t vertex_count = (subdivision_x + 2) * (subdivision_y + 2);
     Vertex *vertices = MALLOC(vertex_count * sizeof(Vertex));
@@ -124,7 +126,7 @@ Mesh create_grid_mesh(float width, float depth, int32_t subdivision_x, int32_t s
             vertices[vi] = (Vertex){
                 .position = {(float)x * quad_width, 0.0f, (float)y * quad_height},
                 .normal = {0.0f, 1.0f, 0.0f},
-                .uv = {(float)x * quad_width / width, (float)y * quad_height / depth},
+                .uv = {(float)x * uv_factor_x, (float)y * uv_factor_y},
             };
         }
     }
@@ -154,8 +156,8 @@ Mesh create_grid_mesh(float width, float depth, int32_t subdivision_x, int32_t s
 
     // Load mesh
     Mesh grid = load_mesh(vertices, vertex_count, indices, index_count);
-    mesh_set_vertex_attribute(grid, 0, 0);
-    mesh_set_vertex_attribute(grid, 2, 3 * sizeof(float));
+    mesh_set_vertex_attribute(grid, 0, 3, offsetof(Vertex, position));
+    mesh_set_vertex_attribute(grid, 2, 2, offsetof(Vertex, uv));
 
     // Explicitly passing buffer ownership to the mesh struct
     grid.vertices = vertices;
