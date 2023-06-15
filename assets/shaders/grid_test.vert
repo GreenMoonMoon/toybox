@@ -7,6 +7,6 @@ uniform mat4 mvp; //view-projection matrix
 out vec3 color;
 
 void main() {
-    color = vec3(aPosition.y / 5.0f);
+    color = vec3(aPosition.y / 8.0f);
     gl_Position = mvp * vec4(aPosition, 1.0);
 }

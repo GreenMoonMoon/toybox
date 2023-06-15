@@ -15,7 +15,7 @@ typedef struct Terrain {
 } Terrain;
 
 // TODO: load heightmap from png, then initialize terrain with heightmap
-Terrain terrain_load_from_png(const char *filename);
+Terrain terrain_load_from_png(const char *filename, float world_scale);
 
 void terrain_delete(Terrain terrain);
 

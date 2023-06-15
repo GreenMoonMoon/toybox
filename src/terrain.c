@@ -9,7 +9,7 @@
 #include "cglm/cglm.h"
 #include "glad/gl.h"
 
-Terrain terrain_load_from_png(const char *filename) {
+Terrain terrain_load_from_png(const char *filename, float world_scale) {
     // TODO: there should be a way to avoid create a transient buffer and pass a transform function to manipulate
     //  the file data directly while copying them in the final buffer.
     uint8_t *buffer;
@@ -20,12 +20,12 @@ Terrain terrain_load_from_png(const char *filename) {
 
     Terrain terrain = {0};
     terrain.size = (uint32_t)sqrt((double)file_size);
-    terrain.mesh = create_grid_mesh(25.0f, 25.0f, terrain.size - 2, terrain.size - 2);
+    terrain.mesh = create_grid_mesh(40.0f, 40.0f, terrain.size - 2, terrain.size - 2);
 //    terrain.heightmap = MALLOC(file_size * sizeof(float));
     for (int i = 0; i < file_size; ++i) {
         float value = (1.0f / 255.0f) * (float)buffer[i];
 //        terrain.heightmap[i] = (1.0f / 255.0f) * (float)buffer[i];
-        terrain.mesh.vertices[i].position[1] = value * 5.0f;
+        terrain.mesh.vertices[i].position[1] = value * world_scale;
     }
     FREE(buffer);
 

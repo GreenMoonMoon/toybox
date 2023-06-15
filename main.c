@@ -20,7 +20,7 @@ int main() {
 //    Node quad = node_create_quad();
 //    Node grid = node_create_grid(5.0f, 5.0f, 4, 4);
 
-    Terrain terrain = terrain_load_from_png("assets/textures/simple_test.png");
+    Terrain terrain = terrain_load_from_png("assets/textures/simple_test.png", 8.0f);
     Material material = material_load_from_files("assets/shaders/grid_test.vert", "assets/shaders/grid_test.frag");
 
     while (!viewport_is_closing(viewport)) {
