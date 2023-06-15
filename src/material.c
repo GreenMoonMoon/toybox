@@ -113,7 +113,7 @@ Material material_load_from_files(const char *vertex_source_file, const char *fr
     return result;
 }
 
-void material_set_in_use(Material material) {
+void material_enable(Material material) {
     glUseProgram(material.shader.handle);
 }
 

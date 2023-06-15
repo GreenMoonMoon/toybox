@@ -31,7 +31,7 @@ Shader shader_load_from_files(const char* vertex_source_file, const char* fragme
 
 Material material_load_from_files(const char *vertex_source_file, const char *fragment_source_file);
 
-void material_set_in_use(Material material);
+void material_enable(Material material);
 
 void material_set_mvp(Material material, mat4 model, mat4 view, mat4 projection);
 

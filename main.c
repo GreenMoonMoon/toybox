@@ -23,6 +23,7 @@ int main() {
     Material material = material_load_from_files("assets/shaders/basic.vert", "assets/shaders/basic.frag");
 
     while (!viewport_is_closing(viewport)) {
+        viewport_process_events(viewport);
         viewport_start_frame(viewport);
         double delta_time = viewport_get_delta_time(viewport);
 
@@ -36,7 +37,6 @@ int main() {
 
 //    terrain_delete(terrain);
     mesh_delete(mesh);
-
     viewport_delete(viewport);
 
     return EXIT_SUCCESS;

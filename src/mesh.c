@@ -66,9 +66,8 @@ Mesh create_primitive(const Vertex *vertices, size_t vertices_size, const uint32
     memcpy_s(mesh.vertices, vertices_size, vertices, vertices_size);
     mesh.vertex_count = vertex_count;
 
-    mesh.indices = MALLOC(sizeof(indices));
+    mesh.indices = MALLOC(indices_size);
     memcpy_s(mesh.indices, indices_size, indices, indices_size);
-    mesh.index_count = index_count;
 
     return mesh;
 }
@@ -162,7 +161,6 @@ Mesh create_grid_mesh(float width, float depth, int32_t subdivision_x, int32_t s
     grid.vertices = vertices;
     grid.vertex_count = vertex_count;
     grid.indices = indices;
-    grid.index_count = index_count;
 
     return grid;
 }
