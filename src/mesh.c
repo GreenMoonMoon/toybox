@@ -83,8 +83,8 @@ Mesh create_grid_mesh(float width, float height, int32_t subdivision_x, int32_t 
             uint32_t tr = (y + 1) * (subdivision_x + 2) + x + 1; // top right
 
             // first quad triangle
-            indices[index++] = bl;
             indices[index++] = br;
+            indices[index++] = bl;
             indices[index++] = tl;
 
             // second quad triangle

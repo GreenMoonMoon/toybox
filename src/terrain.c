@@ -4,7 +4,6 @@
 
 #include "terrain.h"
 #include <assert.h>
-#include <stdio.h>
 #include "io/file.h"
 #include "types/array_2d.h"
 #include "cglm/cglm.h"
@@ -26,7 +25,7 @@ Terrain terrain_load_from_png(const char *filename) {
     for (int i = 0; i < file_size; ++i) {
         float value = (1.0f / 255.0f) * (float)buffer[i];
 //        terrain.heightmap[i] = (1.0f / 255.0f) * (float)buffer[i];
-        terrain.mesh.vertices[i].position[1] = value * -5.0f;
+        terrain.mesh.vertices[i].position[1] = value * 5.0f;
     }
     FREE(buffer);
 

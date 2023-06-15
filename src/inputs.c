@@ -7,7 +7,7 @@
 
 float input_get_horizontal_axis() {
     const uint8_t *state = SDL_GetKeyboardState(NULL);
-    return (float)state[SDL_SCANCODE_D] - (float)state[SDL_SCANCODE_A];
+    return (float)state[SDL_SCANCODE_A] - (float)state[SDL_SCANCODE_D];
 }
 
 float input_get_vertical_axis() {

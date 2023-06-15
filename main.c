@@ -29,10 +29,8 @@ int main() {
 
         debug_camera_update(delta_time);
 
-//        node_draw(&quad, &camera);
-//        node_draw_wireframe(&quad, &camera);
-//        node_draw_wireframe(&grid, &camera);
-        draw_mesh_wireframe(terrain.mesh, GLM_MAT4_IDENTITY, debug_camera.transform, debug_camera.projection, material);
+        draw_mesh(terrain.mesh, GLM_MAT4_IDENTITY, debug_camera.transform, debug_camera.projection, material);
+//        draw_mesh_wireframe(terrain.mesh, GLM_MAT4_IDENTITY, debug_camera.transform, debug_camera.projection, material);
 
         viewport_end_frame(viewport);
     }
