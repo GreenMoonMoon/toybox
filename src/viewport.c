@@ -91,7 +91,7 @@ double viewport_get_delta_time(Viewport *viewport) {
     return delta_time;
 }
 
-void viewport_clear() {
+void viewport_start_frame() {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
 
@@ -99,6 +99,6 @@ void viewport_set_clear_color(float r, float g, float b, float a) {
     glClearColor(r, g, b, a);
 }
 
-void viewport_swap_window(Viewport *viewport) {
+void viewport_end_frame(Viewport *viewport) {
     SDL_GL_SwapWindow(viewport->window);
 }

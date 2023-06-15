@@ -3,6 +3,7 @@
 #include "viewport.h"
 #include "node.h"
 #include "camera.h"
+#include "draw.h"
 #include "terrain.h"
 
 Viewport *viewport;
@@ -12,30 +13,32 @@ int main() {
 
     viewport_set_clear_color(0.1f, 0.1f, 0.1f, 1.0f);
 
-    Camera camera = camera_create_perspective(4.0f/3.0f, (vec3){-1.25f, 1.0f, -12.0f}, 75.0f, 0.1f, 100.0f);
+    Camera camera = camera_create_perspective(4.0f/3.0f, (vec3){-6.2f, 0.75f, -35.0f}, 75.0f, 0.1f, 100.0f);
     glm_rotate_x(camera.transform, -0.25f, camera.transform);
 
-    Node quad = node_create_quad();
-    Node grid = node_create_grid(5.0f, 5.0f, 4, 4);
+//    Node quad = node_create_quad();
+//    Node grid = node_create_grid(5.0f, 5.0f, 4, 4);
 
-//    Terrain terrain = terrain_load_from_png("assets/textures/heightmap.png");
+    Terrain terrain = terrain_load_from_png("assets/textures/simple_test.png");
+    Material material = material_load_from_files("assets/shaders/grid_test.vert", "assets/shaders/grid_test.frag");
 
     while (!viewport_is_closing(viewport)) {
         viewport_process_events(viewport);
         double delta_time = viewport_get_delta_time(viewport);
 
-        viewport_clear();
+        viewport_start_frame();
 
 //        node_draw(&quad, &camera);
 //        node_draw_wireframe(&quad, &camera);
-        node_draw_wireframe(&grid, &camera);
+//        node_draw_wireframe(&grid, &camera);
+        draw_mesh_wireframe(terrain.mesh, GLM_MAT4_IDENTITY, camera.transform, camera.projection, material);
 
-        viewport_swap_window(viewport);
+        viewport_end_frame(viewport);
     }
 
-    node_delete(&quad);
-    node_delete(&grid);
-//    terrain_delete(terrain);
+//    node_delete(&quad);
+//    node_delete(&grid);
+    terrain_delete(terrain);
 
     viewport_delete(viewport);
 

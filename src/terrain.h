@@ -5,14 +5,13 @@
 #ifndef TOYBOX_SRC_GEOMETRY_TERRAIN_H_
 #define TOYBOX_SRC_GEOMETRY_TERRAIN_H_
 
+#include "mesh.h"
 #include "cglm/cglm.h"
 
-struct Mesh;
-
 typedef struct Terrain {
-  struct Mesh *mesh;
   float *heightmap;
   size_t size;
+  struct Mesh mesh;
 } Terrain;
 
 // TODO: load heightmap from png, then initialize terrain with heightmap

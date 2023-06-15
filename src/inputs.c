@@ -3,3 +3,5 @@
 //
 
 #include "inputs.h"
+#include "SDL.h"
+

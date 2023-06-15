@@ -41,4 +41,6 @@ void mesh_unload(Mesh mesh);
 /// Unload a mesh from the GPU and delete local data
 void mesh_delete(Mesh mesh);
 
+Mesh create_grid_mesh(float width, float height, int32_t subdivision_x, int32_t subdivision_y);
+
 #endif //SUPERMARIO_GPU_H

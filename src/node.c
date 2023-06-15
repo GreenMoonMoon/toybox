@@ -4,6 +4,7 @@
 
 #include "node.h"
 #include "draw.h"
+#include "mesh.h"
 #include "camera.h"
 #include "memory.h"
 
@@ -39,38 +40,7 @@ Node node_create_quad() {
 }
 
 Node node_create_grid(float width, float height, int32_t subdivision_x, int32_t subdivision_y) {
-    // Generate vertices
-    float quad_width = width / (float)(subdivision_x + 1);
-    float quad_height = height / (float)(subdivision_y + 1);
-
-    int32_t vertex_count = (subdivision_x + 2) * (subdivision_y + 2);
-    Vertex *vertices = MALLOC(vertex_count * sizeof(Vertex));
-    for (int i = 0; i < subdivision_y + 2; ++i) {
-        for (int j = 0; j < subdivision_x + 2; ++j) {
-            int32_t vi = i * (subdivision_x + 2) + j;
-            vertices[vi] = (Vertex){
-                .position = {(float)j * quad_width, 0.0f, (float)i * quad_height},
-                .normal = {0.0f, 1.0f, 0.0f},
-                .uv = {(float)j * quad_width / width, (float)i * quad_height / height},
-            };
-        }
-    }
-
-    // Generate indices
-    int32_t index_count = 0;
-//    uint32_t *indices = MALLOC(index_count * sizeof(float));
-    uint32_t  *indices = NULL;
-
-    // Load mesh
-    Mesh grid = mesh_load(vertices, vertex_count, indices, index_count);
-    mesh_set_vertex_attribute(grid, 0, 0);
-    mesh_set_vertex_attribute(grid, 2, 3 * sizeof(float));
-
-    // Explicitly passing buffer ownership to the mesh struct
-    grid.vertices = vertices;
-    grid.vertex_count = vertex_count;
-    grid.indices = indices;
-    grid.index_count = index_count;
+    Mesh grid = create_grid_mesh(width, height, subdivision_x, subdivision_y);
 
     Material material = material_load_from_files("assets/shaders/grid_test.vert", "assets/shaders/grid_test.frag");
 

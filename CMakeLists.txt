@@ -38,7 +38,7 @@ target_sources(toybox PRIVATE
         src/io/file.c
         src/node.c
         src/camera.c
-
+        src/inputs.c
         src/terrain.c
 
         ${extern_SOURCES})

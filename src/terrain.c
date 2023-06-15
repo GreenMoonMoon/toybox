@@ -7,8 +7,8 @@
 #include <stdio.h>
 #include "io/file.h"
 #include "types/array_2d.h"
-#include "mesh.h"
 #include "cglm/cglm.h"
+#include "glad/gl.h"
 
 Terrain terrain_load_from_png(const char *filename) {
     // TODO: there should be a way to avoid create a transient buffer and pass a transform function to manipulate
@@ -20,17 +20,22 @@ Terrain terrain_load_from_png(const char *filename) {
     assert(file_size % sizeof(uint8_t) == 0);
 
     Terrain terrain = {0};
-    terrain.heightmap = MALLOC(file_size * sizeof(float));
-    for (int i = 0; i < file_size; ++i) {
-        terrain.heightmap[i] = (1.0f / 255.0f) * (float)buffer[i];
-    }
     terrain.size = (uint32_t)sqrt((double)file_size);
+    terrain.mesh = create_grid_mesh(25.0f, 25.0f, terrain.size - 2, terrain.size - 2);
+//    terrain.heightmap = MALLOC(file_size * sizeof(float));
+    for (int i = 0; i < file_size; ++i) {
+        float value = (1.0f / 255.0f) * (float)buffer[i];
+//        terrain.heightmap[i] = (1.0f / 255.0f) * (float)buffer[i];
+        terrain.mesh.vertices[i].position[1] = value * -5.0f;
+    }
     FREE(buffer);
+
+    glNamedBufferSubData(terrain.mesh.buffers[0], 0, terrain.mesh.vertex_count * sizeof(Vertex), terrain.mesh.vertices);
 
     return terrain;
 }
 
 void terrain_delete(Terrain terrain){
-    if (terrain.mesh) mesh_delete(*terrain.mesh);
+    mesh_delete(terrain.mesh);
     FREE_ARRAY_2D(terrain.heightmap);
 }
