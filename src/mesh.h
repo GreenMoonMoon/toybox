@@ -25,6 +25,8 @@ typedef struct Mesh {
   uint32_t buffers[2];
 } Mesh;
 
+uint32_t mesh_load_vertex_buffer(Mesh *mesh, const uint8_t *vertices, int32_t vertex_size, size_t vertex_count);
+
 /// Load a mesh on the GPU
 Mesh load_mesh(const Vertex *vertices, int32_t vertex_count, const uint32_t *indices, int32_t index_count);
 

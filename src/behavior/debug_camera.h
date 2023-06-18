@@ -24,6 +24,7 @@ void debug_camera_update(double delta_time){
         0.0f,
         get_vertical_input_axis()
     };
+
     glm_vec3_normalize(move_input);
     glm_vec3_scale(move_input, delta_time * camera_speed, move_input);
 

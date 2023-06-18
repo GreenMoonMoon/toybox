@@ -14,6 +14,12 @@ typedef struct Terrain {
   struct Mesh mesh;
 } Terrain;
 
+void terrain_create(Terrain *terrain, int32_t resolution, float width, float height);
+
+void terrain_load_mesh(Terrain *terrain);
+
+void load_heightmap(Terrain *terrain, const char *filename);
+
 // TODO: load heightmap from png, then initialize terrain with heightmap
 Terrain load_terrain_from_png(const char *filename, float world_scale);
 

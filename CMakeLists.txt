@@ -36,6 +36,7 @@ target_sources(toybox PRIVATE
         src/mesh.c
         src/material.c
         src/io/file.c
+        src/io/image.c
         src/node.c
         src/camera.c
         src/inputs.c

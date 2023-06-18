@@ -14,10 +14,15 @@ int main() {
 
     set_clear_color(0.1f, 0.1f, 0.1f, 1.0f);
 
+    // Load scene
     debug_camera_init();
 
     Mesh mesh = create_cube_mesh(5.0f, 6.0f, 7.0f);
-    Terrain terrain = load_terrain_from_png("assets/textures/simple_test.png", 8.0f);
+
+    Terrain terrain = {0};
+    terrain_create(&terrain, 20, 512, 512);
+    terrain_load_mesh(&terrain);
+
 
     Material terrain_material = load_material_from_files("assets/shaders/basic_terrain.vert", "assets/shaders/basic_terrain.frag");
     Material material = load_material_from_files("assets/shaders/basic_texture.vert", "assets/shaders/basic_texture.frag");
@@ -35,7 +40,8 @@ int main() {
         draw_mesh(mesh, GLM_MAT4_IDENTITY, debug_camera.transform, debug_camera.projection, material);
 
         material_set_albedo(terrain_material, &texture);
-        draw_mesh(terrain.mesh, GLM_MAT4_IDENTITY, debug_camera.transform, debug_camera.projection, terrain_material);
+//        draw_mesh(terrain.mesh, GLM_MAT4_IDENTITY, debug_camera.transform, debug_camera.projection, terrain_material);
+        draw_mesh_wireframe(terrain.mesh, GLM_MAT4_IDENTITY, debug_camera.transform, debug_camera.projection, terrain_material);
 
         viewport_end_frame(viewport);
     }
