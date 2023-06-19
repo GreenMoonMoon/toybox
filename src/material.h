@@ -22,6 +22,7 @@ typedef struct Shader {
     int32_t light_intensity_loc;
     int32_t diffuse_reflectivity_loc;
     int32_t albedo_loc;
+    int32_t heightmap;
 } Shader;
 
 typedef struct Material {
@@ -33,6 +34,8 @@ Shader setup_shader(uint32_t program_handle);
 Shader load_shader_from_file(const char* vertex_source_file, const char* fragment_source_file);
 
 Material load_material_from_files(const char *vertex_source_file, const char *fragment_source_file);
+
+Material load_tesselation_material_from_files(const char *vertex_source_file, const char *tess_control_source_file, const char *tess_evaluation_source_file, const char* fragment_source_file);
 
 void material_enable(Material material);
 

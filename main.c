@@ -11,21 +11,18 @@ Viewport *viewport;
 
 int main() {
     viewport_init(&viewport, 800, 600, "Main");
-
     set_clear_color(0.1f, 0.1f, 0.1f, 1.0f);
 
     // Load scene
     debug_camera_init();
 
-    Mesh mesh = create_cube_mesh(5.0f, 6.0f, 7.0f);
+    TerrainMesh terrain_mesh = {0};
+    terrain_create(&terrain_mesh, 20, 512, 512);
 
-    Terrain terrain = {0};
-    terrain_create(&terrain, 20, 512, 512);
-    terrain_load_mesh(&terrain);
-
-
-    Material terrain_material = load_material_from_files("assets/shaders/basic_terrain.vert", "assets/shaders/basic_terrain.frag");
-    Material material = load_material_from_files("assets/shaders/basic_texture.vert", "assets/shaders/basic_texture.frag");
+    Material terrain_material = load_tesselation_material_from_files("assets/shaders/basic_terrain.vert",
+                                                                     "assets/shaders/basic_terrain.tesc",
+                                                                     "assets/shaders/basic_terrain.tese",
+                                                                     "assets/shaders/basic_terrain.frag");
 
     Texture texture = load_texture_from_png("assets/textures/grid.png");
 
@@ -36,18 +33,14 @@ int main() {
 
         debug_camera_update(delta_time);
 
-        material_set_albedo(material, &texture);
-        draw_mesh(mesh, GLM_MAT4_IDENTITY, debug_camera.transform, debug_camera.projection, material);
-
         material_set_albedo(terrain_material, &texture);
 //        draw_mesh(terrain.mesh, GLM_MAT4_IDENTITY, debug_camera.transform, debug_camera.projection, terrain_material);
-        draw_mesh_wireframe(terrain.mesh, GLM_MAT4_IDENTITY, debug_camera.transform, debug_camera.projection, terrain_material);
+        draw_terrain_wireframe(&terrain_mesh, GLM_MAT4_IDENTITY, debug_camera.transform, debug_camera.projection, terrain_material);
 
         viewport_end_frame(viewport);
     }
 
-    terrain_delete(terrain);
-    mesh_delete(mesh);
+    terrain_delete(terrain_mesh);
     viewport_delete(viewport);
 
     return EXIT_SUCCESS;

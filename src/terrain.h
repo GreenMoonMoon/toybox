@@ -8,21 +8,22 @@
 #include "mesh.h"
 #include "cglm/cglm.h"
 
-typedef struct Terrain {
+typedef struct TerrainMesh {
   float *heightmap;
   size_t size;
-  struct Mesh mesh;
-} Terrain;
+  uint32_t vao;
+  uint32_t vertex_buffer;
+  int32_t index_count;
+  int32_t vertex_count;
+} TerrainMesh;
 
-void terrain_create(Terrain *terrain, int32_t resolution, float width, float height);
+void terrain_create(TerrainMesh *terrain, int32_t resolution, float width, float height);
 
-void terrain_load_mesh(Terrain *terrain);
-
-void load_heightmap(Terrain *terrain, const char *filename);
+void load_heightmap(TerrainMesh *terrain, const char *filename);
 
 // TODO: load heightmap from png, then initialize terrain with heightmap
-Terrain load_terrain_from_png(const char *filename, float world_scale);
+TerrainMesh load_terrain_from_png(const char *filename, float world_scale);
 
-void terrain_delete(Terrain terrain);
+void terrain_delete(TerrainMesh terrain);
 
 #endif //TOYBOX_SRC_GEOMETRY_TERRAIN_H_
