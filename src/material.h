@@ -52,6 +52,8 @@ void material_set_scale(Material material, float scale);
 
 void material_set_offset(Material material, float offset);
 
+void material_set_eye_position(Material material, mat4 transform);
+
 void material_unload(Material material);
 
 #endif //SUPERMARIO_SHADER_H

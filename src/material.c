@@ -197,8 +197,8 @@ void material_set_offset(Material material, float offset){
     glUniform1f(material.shader.offset_loc, offset);
 }
 
-void material_set_eye_position(Material material, vec3 eye_position){
-    glUniform3f(material.shader.eye_position_loc, eye_position);
+void material_set_eye_position(Material material, mat4 transform){
+    glUniform3f(material.shader.eye_position_loc, transform[3][0], transform[3][1], transform[3][2]);
 }
 
 void material_unload(Material material) {
