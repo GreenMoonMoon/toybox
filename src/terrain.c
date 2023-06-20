@@ -4,8 +4,6 @@
 
 #include "terrain.h"
 #include <assert.h>
-#include "io/file.h"
-#include "io/image.h"
 #include "types/array_2d.h"
 #include "cglm/cglm.h"
 #include "glad/gl.h"
@@ -48,9 +46,9 @@ void terrain_load_mesh(TerrainMesh *terrain, struct TerrainVertex *vertices, siz
     glVertexArrayAttribBinding(terrain->vao, TERRAIN_UV, 0);
 }
 
-void terrain_create(TerrainMesh *terrain, int32_t resolution, float width, float height) {
+void terrain_create(TerrainMesh *terrain, float width, float height,  int32_t resolution) {
     struct TerrainVertex *vertices;
-    terrain->vertex_count = resolution * resolution * 4;
+    terrain->vertex_count = (resolution - 1) * (resolution - 1) * 4;
     size_t vertices_size = terrain->vertex_count * sizeof(struct TerrainVertex);
     vertices = MALLOC(vertices_size);
     if (vertices == NULL) return;
@@ -61,7 +59,7 @@ void terrain_create(TerrainMesh *terrain, int32_t resolution, float width, float
     // Generate patch vertices
     size_t index = 0;
     for (int y = 0; y < resolution - 1; ++y) {
-        for (int x = 0; x < resolution - 1; x += 4) {
+        for (int x = 0; x < resolution - 1; ++x) {
             struct TerrainVertex a = {
                 {(width * x)/resolution - half_width, 0.0f, (height * y)/resolution - half_height},
                 {x / (float) resolution, y / (float) resolution},
@@ -82,7 +80,7 @@ void terrain_create(TerrainMesh *terrain, int32_t resolution, float width, float
 
             struct TerrainVertex d = {
                 {(width * (x + 1))/resolution - half_width, 0.0f, (height * (y + 1))/resolution - half_height},
-                {x / (float) resolution, (y + 1) / (float) resolution},
+                {(x + 1) / (float) resolution, (y + 1) / (float) resolution},
             };
             vertices[index++] = d;
         }

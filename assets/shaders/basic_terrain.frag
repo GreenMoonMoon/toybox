@@ -1,12 +1,14 @@
-#version 460
+#version 460 core
 
 in vec2 tuv;
 in float height;
 
+uniform sampler2D heightmap;
+
 layout(location = 0) out vec4 FragColor;
 
 void main() {
-    float h = (height/255.0);
-//    FragColor = vec4(h, h, h, 1.0);
-    FragColor = vec4(1.0);
+    float h = (height);
+    FragColor = vec4(h, h, h, 1.0);
+//    FragColor = texture(heightmap, tuv);
 }

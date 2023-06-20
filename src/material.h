@@ -22,7 +22,10 @@ typedef struct Shader {
     int32_t light_intensity_loc;
     int32_t diffuse_reflectivity_loc;
     int32_t albedo_loc;
-    int32_t heightmap;
+    int32_t heightmap_loc;
+    int32_t scale_loc;
+    int32_t offset_loc;
+    int32_t eye_position_loc;
 } Shader;
 
 typedef struct Material {
@@ -42,6 +45,12 @@ void material_enable(Material material);
 void material_set_mvp(Material material, mat4 model, mat4 view, mat4 projection);
 
 void material_set_albedo(Material material, struct Texture *texture);
+
+void material_set_heightmap(Material material, struct Texture *texture);
+
+void material_set_scale(Material material, float scale);
+
+void material_set_offset(Material material, float offset);
 
 void material_unload(Material material);
 

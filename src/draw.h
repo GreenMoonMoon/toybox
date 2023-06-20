@@ -15,6 +15,8 @@ void draw_mesh(Mesh mesh, mat4 model, mat4 view, mat4 projection, Material mater
 /// \todo Use geometry shader instead? (although it is used for debug purposes)
 void draw_mesh_wireframe(Mesh mesh, mat4 model, mat4 view, mat4 projection, Material material);
 
+void draw_terrain(struct TerrainMesh *mesh, vec4 *model, vec4 *view, vec4 *projection, Material material);
+
 void draw_terrain_wireframe(struct TerrainMesh *mesh, mat4 model, mat4 view, mat4 projection, Material material);
 
 #endif //TOYBOX_SRC_DRAW_H_

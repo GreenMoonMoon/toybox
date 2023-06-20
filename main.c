@@ -17,14 +17,19 @@ int main() {
     debug_camera_init();
 
     TerrainMesh terrain_mesh = {0};
-    terrain_create(&terrain_mesh, 20, 512, 512);
+    terrain_create(&terrain_mesh, 128.0f, 128.0f, 32);
 
     Material terrain_material = load_tesselation_material_from_files("assets/shaders/basic_terrain.vert",
                                                                      "assets/shaders/basic_terrain.tesc",
                                                                      "assets/shaders/basic_terrain.tese",
                                                                      "assets/shaders/basic_terrain.frag");
 
+    Mesh cube_mesh = create_cube_mesh(1.0f, 1.0f, 1.0f);
+    Material cube_material = load_material_from_files("assets/shaders/basic.vert", "assets/shaders/basic.frag");
+
     Texture texture = load_texture_from_png("assets/textures/grid.png");
+    Texture heightmap = load_texture_from_png("assets/textures/simple_test.png");
+
 
     while (!viewport_is_closing(viewport)) {
         viewport_process_events(viewport);
@@ -33,13 +38,24 @@ int main() {
 
         debug_camera_update(delta_time);
 
-        material_set_albedo(terrain_material, &texture);
-//        draw_mesh(terrain.mesh, GLM_MAT4_IDENTITY, debug_camera.transform, debug_camera.projection, terrain_material);
+//        material_set_albedo(cube_material, &texture);
+//        draw_mesh(cube_mesh, GLM_MAT4_IDENTITY, debug_camera.transform, debug_camera.projection, cube_material);
+
+        material_set_heightmap(terrain_material, &heightmap);
+        material_set_scale(terrain_material, 20.0f);
+        material_set_offset(terrain_material, -10.0f);
+        material_set_eye_position(terrain_material, debug_camera.transform[3]);
+//        draw_terrain(&terrain_mesh, GLM_MAT4_IDENTITY, debug_camera.transform, debug_camera.projection, terrain_material);
         draw_terrain_wireframe(&terrain_mesh, GLM_MAT4_IDENTITY, debug_camera.transform, debug_camera.projection, terrain_material);
 
         viewport_end_frame(viewport);
     }
 
+    texture_unload(texture);
+    texture_unload(heightmap);
+    material_unload(cube_material);
+    material_unload(terrain_material);
+    mesh_delete(cube_mesh);
     terrain_delete(terrain_mesh);
     viewport_delete(viewport);
 

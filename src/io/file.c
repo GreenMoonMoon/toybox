@@ -43,6 +43,9 @@ size_t read_png_file(const char *filename, uint8_t **buffer, int32_t *width, int
         buffer_size = x * y * 4; // width * height * channel
         *buffer = MALLOC(buffer_size);
         memcpy_s(*buffer, buffer_size, data, buffer_size);
+    } else {
+        perror("Error while loading texture");
+        return 0;
     }
     stbi_image_free(data);
 

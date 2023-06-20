@@ -17,7 +17,7 @@ typedef struct TerrainMesh {
   int32_t vertex_count;
 } TerrainMesh;
 
-void terrain_create(TerrainMesh *terrain, int32_t resolution, float width, float height);
+void terrain_create(TerrainMesh *terrain, float width, float height, int32_t resolution);
 
 void load_heightmap(TerrainMesh *terrain, const char *filename);
 

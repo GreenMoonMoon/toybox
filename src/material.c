@@ -86,6 +86,7 @@ Shader setup_shader(uint32_t program_handle) {
             .light_intensity_loc = glGetUniformLocation(program_handle, "lightIntensity"),
             .diffuse_reflectivity_loc = glGetUniformLocation(program_handle, "diffuseReflectivity"),
             .albedo_loc = glGetUniformLocation(program_handle, "tAlbedo"),
+            .heightmap_loc = glGetUniformLocation(program_handle, "heightmap"),
     };
 }
 
@@ -93,7 +94,10 @@ Shader setup_tesselation_shader(uint32_t program_handle) {
     return (Shader) {
         .handle = program_handle,
         .mvp_loc = glGetUniformLocation(program_handle, "mvp"),
-        .heightmap = glGetUniformLocation(program_handle, "heightmap"),
+        .heightmap_loc = glGetUniformLocation(program_handle, "heightmap"),
+        .scale_loc = glGetUniformLocation(program_handle, "scale"),
+        .offset_loc = glGetUniformLocation(program_handle, "offset"),
+        .eye_position_loc = glGetUniformLocation(program_handle, "eye_position"),
     };
 }
 
@@ -178,6 +182,23 @@ void material_set_mvp(Material material, mat4 model, mat4 view, mat4 projection)
 void material_set_albedo(Material material, struct Texture *texture) {
     texture_enable(*texture, 0);
     glUniform1i(material.shader.albedo_loc, 0);
+}
+
+void material_set_heightmap(Material material, struct Texture *texture) {
+    texture_enable(*texture, 1);
+    glUniform1i(material.shader.heightmap_loc, 1);
+}
+
+void material_set_scale(Material material, float scale){
+    glUniform1f(material.shader.scale_loc, scale);
+}
+
+void material_set_offset(Material material, float offset){
+    glUniform1f(material.shader.offset_loc, offset);
+}
+
+void material_set_eye_position(Material material, vec3 eye_position){
+    glUniform3f(material.shader.eye_position_loc, eye_position);
 }
 
 void material_unload(Material material) {
