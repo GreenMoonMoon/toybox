@@ -15,10 +15,10 @@ void main(){
     // invocation zero controls tessellation levels for the entire patch
     if (gl_InvocationID == 0) {
         // Define tesselation control parameters
-        const int MIN_TESS_LEVEL = 4;
-        const int MAX_TESS_LEVEL = 64;
-        const float MIN_DISTANCE = 1.0;
-        const float MAX_DISTANCE = 2.0;
+        const int MIN_TESS_LEVEL = 1;
+        const int MAX_TESS_LEVEL = 16;
+        const float MIN_DISTANCE = 2.0;
+        const float MAX_DISTANCE = 40.0;
 
         // Tranform vertices to get the distance to the eye center
         vec4 eye_space_pos00 = model_view * gl_in[0].gl_Position;

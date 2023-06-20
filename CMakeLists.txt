@@ -22,7 +22,8 @@ include_directories(
         extern/glad/include
         extern/stb-master
         extern/cgltf
-        extern/stb)
+        extern/stb
+        extern/nuklear)
 
 set(extern_SOURCES extern/glad/src/gl.c)
 
@@ -42,6 +43,7 @@ target_sources(toybox PRIVATE
         src/inputs.c
         src/terrain.c
         src/texture.c
+        src/ui.c
 
         ${extern_SOURCES})
 target_include_directories(toybox PRIVATE src)
