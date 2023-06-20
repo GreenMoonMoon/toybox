@@ -98,6 +98,7 @@ Shader setup_tesselation_shader(uint32_t program_handle) {
         .scale_loc = glGetUniformLocation(program_handle, "scale"),
         .offset_loc = glGetUniformLocation(program_handle, "offset"),
         .eye_position_loc = glGetUniformLocation(program_handle, "eye_position"),
+        .model_view_loc = glGetUniformLocation(program_handle, "model_view"),
     };
 }
 
@@ -168,14 +169,10 @@ void material_enable(Material material) {
 void material_set_mvp(Material material, mat4 model, mat4 view, mat4 projection) {
     mat4 model_view;
     glm_mat4_mul(view, model, model_view);
-    glUniformMatrix4fv(material.shader.view_loc, 1, GL_FALSE, (float *) model_view);
-    glUniformMatrix4fv(material.shader.projection_loc, 1, GL_FALSE, (float *) projection);
+    glUniformMatrix4fv(material.shader.model_view_loc, 1, GL_FALSE, (float *) model_view);
 
     mat4 mvp;
-    glm_mat4_mul(model_view, view, mvp);
-    glUniformMatrix4fv(material.shader.model_view_loc, 1, GL_FALSE, (float *) mvp);
-
-    glm_mat4_mul(projection, mvp, mvp);
+    glm_mat4_mul(projection, model_view, mvp);
     glUniformMatrix4fv(material.shader.mvp_loc, 1, GL_FALSE, (float *) mvp);
 }
 

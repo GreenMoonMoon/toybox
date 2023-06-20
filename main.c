@@ -44,7 +44,6 @@ int main() {
         material_set_heightmap(terrain_material, &heightmap);
         material_set_scale(terrain_material, 20.0f);
         material_set_offset(terrain_material, -10.0f);
-        material_set_eye_position(terrain_material, debug_camera.transform);
 //        draw_terrain(&terrain_mesh, GLM_MAT4_IDENTITY, debug_camera.transform, debug_camera.projection, terrain_material);
         draw_terrain_wireframe(&terrain_mesh, GLM_MAT4_IDENTITY, debug_camera.transform, debug_camera.projection, terrain_material);
 

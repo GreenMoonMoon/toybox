@@ -14,8 +14,7 @@ Camera debug_camera;
 const float camera_speed = 7.5f;
 
 void debug_camera_init(void){
-    debug_camera = create_perspective_camera(4.0f / 3.0f, (vec3) {0.0f, -2.0f, 0.0f}, 1.5f, 0.1f, 100.0f);
-//    glm_rotate_x(debug_camera.transform, 0.2f, debug_camera.transform);
+    debug_camera = create_perspective_camera(4.0f / 3.0f, (vec3) {0.0f, -2.0f, -8.0f}, 1.5f, 0.1f, 100.0f);
 }
 
 void debug_camera_update(double delta_time){
