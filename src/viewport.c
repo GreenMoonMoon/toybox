@@ -102,3 +102,7 @@ void set_clear_color(float r, float g, float b, float a) {
 void viewport_end_frame(Viewport *viewport) {
     SDL_GL_SwapWindow(viewport->window);
 }
+
+void viewport_capture_mouse(Viewport *viewport){
+    SDL_SetRelativeMouseMode(SDL_TRUE);
+}

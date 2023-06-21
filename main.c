@@ -12,7 +12,10 @@ Viewport *viewport;
 
 int main() {
     viewport_init(&viewport, 800, 600, "Main");
+    viewport_capture_mouse(viewport);
+
     set_clear_color(0.1f, 0.1f, 0.1f, 1.0f);
+    init_keyboard_inputs();
 
     // Load scene
     debug_camera_init();

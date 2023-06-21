@@ -21,5 +21,6 @@ double viewport_get_delta_time(Viewport *viewport);
 void viewport_start_frame(Viewport *viewport);
 void viewport_end_frame(Viewport *viewport);
 void set_clear_color(float r, float g, float b, float a);
+void viewport_capture_mouse(Viewport *viewport);
 
 #endif //TOYBOX_SRC_VIEWPORT_H_
