@@ -6,6 +6,7 @@
 #define VERTEX32_FILE_IO_H
 
 #include <stdint.h>
+#include <stdlib.h>
 
 /// Return the length of a file in bytes.
 /// \param file_path

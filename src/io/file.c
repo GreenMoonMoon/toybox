@@ -22,14 +22,15 @@ size_t read_file(const char* filename, char **buffer) {
     size_t file_size = get_file_size(filename);
 
     FILE *file;
-    fopen_s(&file, filename, "r");
+    FOPEN(file, filename, "r");
     if(!file) return 0;
 
     *buffer = (char*)MALLOC(file_size + 1);
     if(!(*buffer)) return 0;
 
-    size_t readLength = fread_s((*buffer), file_size + 1, sizeof(char), file_size, file);
-    (*buffer)[readLength] = '\0';
+    size_t read_length = fread((*buffer), 1, file_size, file);
+    (*buffer)[read_length] = '\0';
+    if (ferror(file)) fprintf(stderr, "ERROR FILE READ\n");
 
     fclose(file);
     return file_size + 1;
@@ -42,7 +43,7 @@ size_t read_png_file(const char *filename, uint8_t **buffer, int32_t *width, int
     if (data != NULL){
         buffer_size = x * y * 4; // width * height * channel
         *buffer = MALLOC(buffer_size);
-        memcpy_s(*buffer, buffer_size, data, buffer_size);
+        MEMCPY(*buffer, buffer_size, data, buffer_size);
     } else {
         perror("Error while loading texture");
         return 0;
@@ -61,7 +62,7 @@ size_t read_png_file_r(const char *filename, uint8_t **buffer) {
     if (data != NULL){
         file_size = x * y;
         *buffer = MALLOC(x * y);
-        memcpy_s(*buffer, file_size, data, file_size);
+        MEMCPY(*buffer, file_size, data, file_size);
     }
     stbi_image_free(data);
 

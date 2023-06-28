@@ -4,6 +4,7 @@
 
 #include "mesh.h"
 #include <string.h>
+#include <stdint.h>
 #include "memory.h"
 #include "glad/gl.h"
 
@@ -74,11 +75,11 @@ Mesh create_primitive(const Vertex *vertices, size_t vertices_size, const uint32
     mesh_set_vertex_attribute(mesh, 2, 2, offsetof(Vertex, uv));
 
     mesh.vertices = MALLOC(vertices_size);
-    memcpy_s(mesh.vertices, vertices_size, vertices, vertices_size);
+    MEMCPY(mesh.vertices, vertices_size, vertices, vertices_size);
     mesh.vertex_count = vertex_count;
 
     mesh.indices = MALLOC(indices_size);
-    memcpy_s(mesh.indices, indices_size, indices, indices_size);
+    MEMCPY(mesh.indices, indices_size, indices, indices_size);
 
     return mesh;
 }

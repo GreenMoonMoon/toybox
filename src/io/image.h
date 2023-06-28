@@ -5,7 +5,8 @@
 #ifndef TOYBOX_SRC_IO_IMAGE_H_
 #define TOYBOX_SRC_IO_IMAGE_H_
 
-#include "stdint.h"
+#include <stdint.h>
+#include <stdlib.h>
 
 
 typedef struct Image {

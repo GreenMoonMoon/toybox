@@ -18,7 +18,7 @@ void image_load_png8_file(Image *image, const char *filename) {
         image->size = x * y * n;
         image->buffer = MALLOC(x * y);
         assert(image->buffer == NULL);
-        memcpy_s(image->buffer, image->size, data, image->size);
+        MEMCPY(image->buffer, image->size, data, image->size);
     }
     stbi_image_free(data);
 }

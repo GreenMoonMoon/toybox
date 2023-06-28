@@ -16,7 +16,7 @@ void validate_shader(GLuint handle) {
 
         char *log = MALLOC(sizeof(char) * log_length);
         glGetShaderInfoLog(handle, log_length, NULL, log);
-        fprintf(stderr, "ERROR GLSL Shader: %s", log);
+        fprintf(stderr, "ERROR GLSL Shader: %s\n", log);
         free(log);
     }
 }
@@ -30,7 +30,7 @@ void validate_program(GLuint handle) {
 
         char *log = MALLOC(sizeof(char) * log_length);
         glGetProgramInfoLog(handle, log_length, NULL, log);
-        fprintf(stderr, "ERROR GLSL Program: %s", log);
+        fprintf(stderr, "ERROR GLSL Program: %s\n", log);
         free(log);
     }
 }
