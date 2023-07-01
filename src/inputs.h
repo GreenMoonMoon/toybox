@@ -8,6 +8,7 @@
 #include <stdint.h>
 #include <stdbool.h>
 #include "keycodes.h"
+#include "SDL.h"
 
 typedef enum ButtonState {
   BUTTON_STATE_JUST_RELEASED,
@@ -28,5 +29,6 @@ int32_t key_binding_get_state(KeyBinding *binding);
 float key_binding_get_axis(KeyBinding *negative, KeyBinding *positive);
 
 void mouse_get_relative_motion(float *relative_motion);
+
 
 #endif //SUPERMARIO_INPUTS_H

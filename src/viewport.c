@@ -62,6 +62,11 @@ void viewport_delete(struct Viewport *viewport) {
     SDL_Quit();
 }
 
+
+void *viewport_get_window(Viewport *viewport) {
+    return viewport->window;
+}
+
 bool viewport_is_closing(struct Viewport *viewport) {
     return viewport->closing;
 }

@@ -3,7 +3,6 @@
 //
 
 #include "inputs.h"
-#include "SDL.h"
 
 // SDL keyboard state. Element are access via key scancode (Based on USB usage page standard)
 static const uint8_t *keyboard_state;
