@@ -4,6 +4,11 @@
 #include "ui.h"
 #include <stddef.h>
 #include <string.h>
+//#include "example/calculator.h"
+#include "example/node_editor.h"
+//#include "example/overview.h"
+#include "example/style.c"
+
 #define NK_INCLUDE_FIXED_TYPES
 #define NK_INCLUDE_STANDARD_IO
 #define NK_INCLUDE_STANDARD_VARARGS
@@ -16,13 +21,9 @@
 #include "glad/gl.h"
 #include "viewport.h"
 
-#include "example/calculator.c"
-//#include "example/node_editor.c"
-//#include "example/overview.c"
-#include "example/style.c"
 
-#define MAX_VERTEX_MEMORY 512 * 1024
-#define MAX_ELEMENT_MEMORY 128 * 1024
+#define MAX_VERTEX_MEMORY (512 * 1024)
+#define MAX_ELEMENT_MEMORY (128 * 1024)
 
 struct nk_sdl_device {
   struct nk_buffer cmds;
@@ -54,7 +55,7 @@ static struct nk_sdl {
 
 static struct nk_colorf bg;
 
-void ui_device_create(void) {
+static void ui_device_create(void) {
     GLint status;
 
     // language=GLSL
@@ -130,7 +131,7 @@ void nk_sdl_device_upload_atlas(const void *image, int width, int height) {
                  GL_RGBA, GL_UNSIGNED_BYTE, image);
 }
 
-void ui_device_delete(void) {
+static void ui_device_delete(void) {
     struct nk_sdl_device *dev = &sdl.ogl;
     glDetachShader(dev->prog, dev->vert_shdr);
     glDetachShader(dev->prog, dev->frag_shdr);
@@ -141,6 +142,35 @@ void ui_device_delete(void) {
     glDeleteBuffers(1, &dev->vbo);
     glDeleteBuffers(1, &dev->ebo);
     nk_buffer_free(&dev->cmds);
+}
+
+static void clipboard_paste(nk_handle usr, struct nk_text_edit *edit) {
+    const char *text = SDL_GetClipboardText();
+    if (text) nk_textedit_paste(edit, text, nk_strlen(text));
+    (void) usr;
+}
+
+static void clipboard_copy(nk_handle usr, const char *text, int len) {
+    char *str = 0;
+    (void) usr;
+    if (!len) return;
+    str = (char *) malloc((size_t) len + 1);
+    if (!str) return;
+    memcpy(str, text, (size_t) len);
+    str[len] = '\0';
+    SDL_SetClipboardText(str);
+    free(str);
+}
+
+struct nk_context *ui_init(struct Viewport *viewport) {
+    sdl.win = (SDL_Window *) viewport_get_window(viewport);
+    nk_init_default(&sdl.ctx, 0);
+    sdl.ctx.clip.copy = clipboard_copy;
+    sdl.ctx.clip.paste = clipboard_paste;
+    sdl.ctx.clip.userdata = nk_handle_ptr(0);
+    ui_device_create();
+    bg.r = 0.10f, bg.g = 0.18f, bg.b = 0.24f, bg.a = 1.0f;
+    return &sdl.ctx;
 }
 
 void ui_draw(enum nk_anti_aliasing AA, int max_vertex_buffer, int max_element_buffer) {
@@ -243,35 +273,6 @@ void ui_draw(enum nk_anti_aliasing AA, int max_vertex_buffer, int max_element_bu
     glBindVertexArray(0);
     glDisable(GL_BLEND);
     glDisable(GL_SCISSOR_TEST);
-}
-
-static void nk_sdl_clipboard_paste(nk_handle usr, struct nk_text_edit *edit) {
-    const char *text = SDL_GetClipboardText();
-    if (text) nk_textedit_paste(edit, text, nk_strlen(text));
-    (void) usr;
-}
-
-static void nk_sdl_clipboard_copy(nk_handle usr, const char *text, int len) {
-    char *str = 0;
-    (void) usr;
-    if (!len) return;
-    str = (char *) malloc((size_t) len + 1);
-    if (!str) return;
-    memcpy(str, text, (size_t) len);
-    str[len] = '\0';
-    SDL_SetClipboardText(str);
-    free(str);
-}
-
-struct nk_context *ui_init(struct Viewport *viewport) {
-    sdl.win = (SDL_Window *) viewport_get_window(viewport);
-    nk_init_default(&sdl.ctx, 0);
-    sdl.ctx.clip.copy = nk_sdl_clipboard_copy;
-    sdl.ctx.clip.paste = nk_sdl_clipboard_paste;
-    sdl.ctx.clip.userdata = nk_handle_ptr(0);
-    ui_device_create();
-    bg.r = 0.10f, bg.g = 0.18f, bg.b = 0.24f, bg.a = 1.0f;
-    return &sdl.ctx;
 }
 
 static void ui_font_stash_begin(struct nk_font_atlas **atlas) {
@@ -424,8 +425,8 @@ void ui_draw_demo(struct nk_context *ctx) {
     nk_end(ctx);
 
 //    overview(ctx);
-    calculator(ctx);
-//    node_editor(ctx);
+//    calculator(ctx);
+    node_editor(ctx);
 
     /* IMPORTANT: `nk_sdl_render` modifies some global OpenGL state
          * with blending, scissor, face culling, depth test and viewport and
@@ -440,4 +441,11 @@ void ui_delete(void) {
     nk_free(&sdl.ctx);
     ui_device_delete();
     memset(&sdl, 0, sizeof(sdl));
+}
+void ui_event_start(struct nk_context *context) {
+    nk_input_begin(context);
+}
+
+void ui_event_end(struct nk_context *context) {
+    nk_input_end(context);
 }

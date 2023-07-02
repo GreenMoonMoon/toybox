@@ -7,7 +7,6 @@
 #include "terrain.h"
 #include "texture.h"
 #include "behavior/debug_camera.h"
-#include "nuklear.h"
 
 Viewport *viewport;
 struct nk_context *ctx;
@@ -46,11 +45,11 @@ int main() {
         // INPUTS
 //        viewport_process_events(viewport);
         SDL_Event event;
-        nk_input_begin(ctx);
+        ui_event_start(ctx);
         while (SDL_PollEvent(&event)) {
             if (event.type == SDL_QUIT) viewport_close(viewport);
             ui_handle_event(&event);
-        } nk_input_end(ctx);
+        } ui_event_end(ctx);
 
         viewport_start_frame(viewport);
 //        double delta_time = viewport_get_delta_time(viewport);

@@ -18,8 +18,9 @@ void ui_load_fonts(struct nk_context *ctx, struct nk_font_atlas *atlas);
 int ui_handle_event(SDL_Event *event);
 void ui_draw(enum nk_anti_aliasing AA, int max_vertex_buffer, int max_element_buffer);
 void ui_delete(void);
-void ui_device_delete(void);
-void ui_device_create(void);
 void ui_draw_demo(struct nk_context *context);
+
+void ui_event_start(struct nk_context *context);
+void ui_event_end(struct nk_context *context);
 
 #endif //TOYBOX_SRC_UI_H_
