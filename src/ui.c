@@ -5,25 +5,21 @@
 #include <stddef.h>
 #include <string.h>
 //#include "example/calculator.h"
-#include "example/node_editor.h"
+//#include "example/node_editor.h"
 //#include "example/overview.h"
-#include "example/style.c"
+//#include "example/style.c"
 
-#define NK_INCLUDE_FIXED_TYPES
-#define NK_INCLUDE_STANDARD_IO
-#define NK_INCLUDE_STANDARD_VARARGS
-#define NK_INCLUDE_DEFAULT_ALLOCATOR
-#define NK_INCLUDE_VERTEX_BUFFER_OUTPUT
-#define NK_INCLUDE_FONT_BAKING
-#define NK_INCLUDE_DEFAULT_FONT
-#define NK_IMPLEMENTATION
-#include "nuklear.h"
+//#define NK_INCLUDE_FIXED_TYPES
+//#define NK_INCLUDE_STANDARD_IO
+//#define NK_INCLUDE_STANDARD_VARARGS
+//#define NK_INCLUDE_DEFAULT_ALLOCATOR
+//#define NK_INCLUDE_VERTEX_BUFFER_OUTPUT
+//#define NK_INCLUDE_FONT_BAKING
+//#define NK_INCLUDE_DEFAULT_FONT
+//#define NK_IMPLEMENTATION
+//#include "nuklear.h"
 #include "glad/gl.h"
 #include "viewport.h"
-
-
-#define MAX_VERTEX_MEMORY (512 * 1024)
-#define MAX_ELEMENT_MEMORY (128 * 1024)
 
 struct nk_sdl_device {
   struct nk_buffer cmds;
@@ -163,7 +159,7 @@ static void clipboard_copy(nk_handle usr, const char *text, int len) {
 }
 
 struct nk_context *ui_init(struct Viewport *viewport) {
-    sdl.win = (SDL_Window *) viewport_get_window(viewport);
+    sdl.win = (SDL_Window *) get_window_handle(viewport);
     nk_init_default(&sdl.ctx, 0);
     sdl.ctx.clip.copy = clipboard_copy;
     sdl.ctx.clip.paste = clipboard_paste;

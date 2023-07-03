@@ -7,7 +7,7 @@
 // SDL keyboard state. Element are access via key scancode (Based on USB usage page standard)
 static const uint8_t *keyboard_state;
 
-void init_keyboard_inputs(){
+void init_keyboard_inputs(void){
     keyboard_state = SDL_GetKeyboardState(NULL);
 }
 

@@ -2,33 +2,34 @@
 // Created by josue on 2023-02-16.
 //
 
-#ifndef SUPERMARIO_GPU_H
-#define SUPERMARIO_GPU_H
+#ifndef TOYBOX_SRC_MESH_H_
+#define TOYBOX_SRC_MESH_H_
 
 #include <stdint.h>
 #include <stdbool.h>
+#include "types.h"
 #include "cglm/cglm.h"
 
-typedef struct Vertex {
-    vec3 position;
-    vec3 normal;
-    vec2 uv;
-} Vertex;
+struct Camera;
+
+struct MeshData {
+  u8 *vertices_data;
+  isize vertices_data_size;
+  isize vertex_size;
+  i32 *indices_data;
+  isize indices_data_size;
+};
 
 typedef struct Mesh {
-  Vertex *vertices;
-  size_t vertex_count;
-  uint32_t *indices;
-  int32_t index_count;
-
-  uint32_t vao;
-  uint32_t buffers[2];
+  struct MeshData data;
+  i32 index_count;
+  u32 vao;
+  u32 buffers[];
 } Mesh;
 
 uint32_t mesh_load_vertex_buffer(Mesh *mesh, const uint8_t *vertices, int32_t vertex_size, size_t vertex_count);
 
-/// Load a mesh on the GPU
-Mesh load_mesh(const Vertex *vertices, int32_t vertex_count, const uint32_t *indices, int32_t index_count);
+void mesh_load(Mesh mesh);
 
 /// Set a vertex attribute by specifying at which layout location it is going to be accessed and the data offset from
 ///  the start of each vertex.
@@ -44,8 +45,10 @@ void mesh_unload(Mesh mesh);
 /// Unload a mesh from the GPU and delete local data
 void mesh_delete(Mesh mesh);
 
-Mesh create_quad_mesh(float width, float height);
-Mesh create_cube_mesh(float width, float height, float depth);
-Mesh create_grid_mesh(float width, float depth, int32_t subdivision_x, int32_t subdivision_y);
+Mesh new_quad_mesh(float width, float height);
+Mesh new_cube_mesh(float width, float height, float depth);
+Mesh new_grid_mesh(float width, float depth, int32_t subdivision_x, int32_t subdivision_y);
 
-#endif //SUPERMARIO_GPU_H
+void mesh_draw_generic(Mesh mesh, mat4 transform, struct Camera *camera);
+
+#endif //TOYBOX_SRC_MESH_H_

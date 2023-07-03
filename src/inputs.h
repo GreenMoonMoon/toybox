@@ -2,8 +2,8 @@
 // Created by josue on 2023-01-27.
 //
 
-#ifndef SUPERMARIO_INPUTS_H
-#define SUPERMARIO_INPUTS_H
+#ifndef TOYBOX_INPUTS_H
+#define TOYBOX_INPUTS_H
 
 #include <stdint.h>
 #include <stdbool.h>
@@ -31,4 +31,4 @@ float key_binding_get_axis(KeyBinding *negative, KeyBinding *positive);
 void mouse_get_relative_motion(float *relative_motion);
 
 
-#endif //SUPERMARIO_INPUTS_H
+#endif //TOYBOX_INPUTS_H

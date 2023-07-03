@@ -7,21 +7,27 @@
 
 #include <stdbool.h>
 #include <stdint.h>
+#include "types.h"
 
 typedef struct Viewport Viewport;
 
-void viewport_init(Viewport **viewport, uint32_t width, uint32_t height, const char *name);
+enum ViewportMouseMode {
+  MOUSE_MODE_CAPTURED,
+  MOUSE_MODE_FREE,
+};
+
+Viewport *viewport_new(const i32 width, const i32 height, const char *name);
 void viewport_delete(Viewport *viewport);
 
-bool viewport_is_closing(Viewport *viewport);
-void viewport_close(Viewport *viewport);
+bool viewport_should_close(Viewport *viewport);
+void viewport_set_is_closing(struct Viewport *viewport);
 
-void *viewport_get_window(Viewport *viewport);
+void *get_window_handle();
 void viewport_process_events(Viewport *viewport);
 double viewport_get_delta_time(Viewport *viewport);
-void viewport_start_frame(Viewport *viewport);
-void viewport_end_frame(Viewport *viewport);
-void set_clear_color(float r, float g, float b, float a);
-void viewport_capture_mouse(Viewport *viewport);
+void start_frame();
+void end_frame();
+void set_clear_color(f32 r, f32 g, f32 b, f32 a);
+void set_mouse_mode(enum ViewportMouseMode mode);
 
 #endif //TOYBOX_SRC_VIEWPORT_H_

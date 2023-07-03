@@ -33,17 +33,18 @@ add_executable(toybox)
 target_sources(toybox PRIVATE
         main.c
         src/viewport.c
-        src/draw.c
-        src/mesh.c
-        src/material.c
-        src/io/file.c
-        src/io/image.c
-        src/node.c
-        src/camera.c
         src/inputs.c
-        src/terrain.c
-        src/texture.c
-        src/ui.c
+        src/mesh.c
+        src/shader.c
+#        src/draw.c
+#        src/material.c
+#        src/io/file.c
+#        src/io/image.c
+#        src/node.c
+#        src/camera.c
+#        src/terrain.c
+#        src/texture.c
+#        src/ui.c
 
         ${extern_SOURCES})
 target_include_directories(toybox PRIVATE src)

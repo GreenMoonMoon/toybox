@@ -6,8 +6,6 @@
 #include "draw.h"
 #include "mesh.h"
 #include "camera.h"
-#include "memory.h"
-
 
 Node create_quad_node() {
     Mesh quad = create_quad_mesh(1.0f, 1.0f);
