@@ -49,20 +49,32 @@ void mesh_set_vertex_attribute(Mesh *mesh, uint32_t attribute_index, int32_t att
     glVertexArrayAttribBinding(mesh->vao, attribute_index, 0); // Bind attribute location to binding point
 }
 
-void mesh_unload(Mesh mesh) {
-    // Check and unbind vertex array before deleting it
+void mesh_unload(Mesh *mesh) {
     int32_t bound_vao;
     glGetIntegerv(GL_VERTEX_ARRAY_BINDING, &bound_vao);
-    if (bound_vao == mesh.vao) glBindVertexArray(0);
+    if (bound_vao == mesh->vao) glBindVertexArray(0);
 
-    glDeleteBuffers(2, mesh.buffers);
-    glDeleteVertexArrays(1, &mesh.vao);
+    glDeleteBuffers(2, mesh->buffers);
+    mesh->buffers[0] = 0;
+    mesh->buffers[1] = 0;
+    glDeleteVertexArrays(1, &mesh->vao);
+    mesh->vao = 0;
 }
 
-void mesh_delete(Mesh mesh) {
-    mesh_unload(mesh);
-    if (mesh.vertices) FREE(mesh.vertices);
-    if (mesh.indices) FREE(mesh.indices);
+void mesh_delete(Mesh *mesh) {
+    if (mesh->vao) {
+        mesh_unload(mesh);
+    }
+    if (mesh->vertices) {
+        free(mesh->vertices);
+        mesh->vertices = NULL;
+        mesh->vertices_count = 0;
+    }
+    if (mesh->indices) {
+        free(mesh->indices);
+        mesh->indices = NULL;
+        mesh->indices_count = 0;
+    }
 }
 
 Mesh new_mesh_quad(float width, float height) {
@@ -176,7 +188,7 @@ Mesh new_mesh_triangle() {
     const Vertex vertices[] = {
         {{0.0f,  0.5f,   0.0f}, { 0.57535f, -0.57535f,  0.57535f}, {0.0f, 1.0f}},
         {{-0.5f, -0.5f,  0.0f}, { 0.57535f,  0.57535f,  0.57535f}, {0.0f, 0.0f}},
-        {{0.5f,  -5.0f,  0.0f}, {-0.57535f,  0.57535f,  0.57535f}, {1.0f, 0.0f}},
+        {{0.5f,  -0.5f,  0.0f}, {-0.57535f,  0.57535f,  0.57535f}, {1.0f, 0.0f}},
     };
 
     const uint32_t indices[] = {0, 1, 2};
@@ -192,4 +204,9 @@ Mesh new_mesh_triangle() {
     memcpy(triangle.indices, indices, 3);
 
     return triangle;
+}
+
+void mesh_draw(Mesh *mesh) {
+    glBindVertexArray(mesh->vao);
+    glDrawArrays(GL_TRIANGLES, 0, mesh->indices_count);
 }

@@ -19,8 +19,4 @@ size_t get_file_size(const char* file_path);
 /// \return
 size_t read_file(const char* filename, char **buffer);
 
-size_t read_png_file(const char* filename, uint8_t **buffer, int32_t *width, int32_t *height);
-
-size_t read_png_file_r(const char* filename, uint8_t **buffer);
-
 #endif //VERTEX32_FILE_IO_H

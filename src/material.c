@@ -3,8 +3,6 @@
 //
 #include "material.h"
 #include <stdarg.h>
-#include "texture.h"
-#include "memory.h"
 #include "io/file.h"
 
 void validate_shader(GLuint handle) {
@@ -14,9 +12,9 @@ void validate_shader(GLuint handle) {
         GLint log_length = 0;
         glGetShaderiv(handle, GL_INFO_LOG_LENGTH, &log_length);
 
-        char *log = MALLOC(sizeof(char) * log_length);
+        char *log = malloc(sizeof(char) * log_length);
         glGetShaderInfoLog(handle, log_length, NULL, log);
-        fprintf(stderr, "ERROR GLSL Shader: %s\n", log);
+        fprintf(stderr, "[ERROR][GLSL Shader] %s\n", log);
         free(log);
     }
 }
@@ -28,9 +26,9 @@ void validate_program(GLuint handle) {
         GLint log_length = 0;
         glGetProgramiv(handle, GL_INFO_LOG_LENGTH, &log_length);
 
-        char *log = MALLOC(sizeof(char) * log_length);
+        char *log = malloc(sizeof(char) * log_length);
         glGetProgramInfoLog(handle, log_length, NULL, log);
-        fprintf(stderr, "ERROR GLSL Program: %s\n", log);
+        fprintf(stderr, "[ERROR][GLSL Program] %s\n", log);
         free(log);
     }
 }
@@ -106,12 +104,12 @@ Shader load_shader_from_file(const char *vertex_source_file, const char *fragmen
     char *vertex_source;
     read_file(vertex_source_file, &vertex_source);
     GLuint vertex_handle = compile_shader(vertex_source, GL_VERTEX_SHADER);
-    FREE(vertex_source);
+    free(vertex_source);
 
     char *fragment_source;
     read_file(fragment_source_file, &fragment_source);
     GLuint fragment_handle = compile_shader(fragment_source, GL_FRAGMENT_SHADER);
-    FREE(fragment_source);
+    free(fragment_source);
 
     GLuint program_handle = build_program(2, vertex_handle, fragment_handle);
 
@@ -122,7 +120,7 @@ Shader load_shader_from_file(const char *vertex_source_file, const char *fragmen
 /// \param vertex_source_file Vertex shader source file
 /// \param fragment_source_file Fragment shader source file
 /// \return struct Material
-Material load_material_from_files(const char *vertex_source_file, const char *fragment_source_file) {
+Material new_material_from_files(const char *vertex_source_file, const char *fragment_source_file) {
     Material result = {
         .shader = load_shader_from_file(vertex_source_file, fragment_source_file),
     };
@@ -137,22 +135,22 @@ Material load_tesselation_material_from_files(const char *vertex_source_file,
     char *vertex_source;
     read_file(vertex_source_file, &vertex_source);
     GLuint vertex_handle = compile_shader(vertex_source, GL_VERTEX_SHADER);
-    FREE(vertex_source);
+    free(vertex_source);
 
     char *tess_control_source;
     read_file(tess_control_source_file, &tess_control_source);
     GLuint tess_control_handle = compile_shader(tess_control_source, GL_TESS_CONTROL_SHADER);
-    FREE(tess_control_source);
+    free(tess_control_source);
 
     char *tess_evaluation_source;
     read_file(tess_evaluation_source_file, &tess_evaluation_source);
     GLuint tess_evaluation_handle = compile_shader(tess_evaluation_source, GL_TESS_EVALUATION_SHADER);
-    FREE(tess_evaluation_source);
+    free(tess_evaluation_source);
 
     char *fragment_source;
     read_file(fragment_source_file, &fragment_source);
     GLuint fragment_handle = compile_shader(fragment_source, GL_FRAGMENT_SHADER);
-    FREE(fragment_source);
+    free(fragment_source);
 
     GLuint program_handle = build_program(4, vertex_handle, tess_control_handle, tess_evaluation_handle, fragment_handle);
 
@@ -162,8 +160,8 @@ Material load_tesselation_material_from_files(const char *vertex_source_file,
     return result;
 }
 
-void material_enable(Material material) {
-    glUseProgram(material.shader.handle);
+void material_enable(Material *material) {
+    glUseProgram(material->shader.handle);
 }
 
 void material_set_mvp(Material material, mat4 model, mat4 view, mat4 projection) {
@@ -176,28 +174,7 @@ void material_set_mvp(Material material, mat4 model, mat4 view, mat4 projection)
     glUniformMatrix4fv(material.shader.mvp_loc, 1, GL_FALSE, (float *) mvp);
 }
 
-void material_set_albedo(Material material, struct Texture *texture) {
-    texture_enable(*texture, 0);
-    glUniform1i(material.shader.albedo_loc, 0);
-}
-
-void material_set_heightmap(Material material, struct Texture *texture) {
-    texture_enable(*texture, 1);
-    glUniform1i(material.shader.heightmap_loc, 1);
-}
-
-void material_set_scale(Material material, float scale){
-    glUniform1f(material.shader.scale_loc, scale);
-}
-
-void material_set_offset(Material material, float offset){
-    glUniform1f(material.shader.offset_loc, offset);
-}
-
-void material_set_eye_position(Material material, mat4 transform){
-    glUniform3f(material.shader.eye_position_loc, transform[3][0], transform[3][1], transform[3][2]);
-}
-
-void material_unload(Material material) {
-    glDeleteProgram(material.shader.handle);
+void material_delete(Material *material) {
+    glDeleteProgram(material->shader.handle);
+    material->shader.handle = 0;
 }

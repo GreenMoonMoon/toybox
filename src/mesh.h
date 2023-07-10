@@ -39,14 +39,16 @@ void mesh_load(Mesh *mesh);
 void mesh_set_vertex_attribute(Mesh *mesh, uint32_t attribute_index, int32_t attribute_dimension, int32_t offset);
 
 /// Unload a mesh from the gpu but doesn't delete the local data.
-void mesh_unload(Mesh mesh);
+void mesh_unload(Mesh *mesh);
 
 /// Unload a mesh from the GPU and delete local data
-void mesh_delete(Mesh mesh);
+void mesh_delete(Mesh *mesh);
 
 Mesh new_mesh_quad(float width, float height);
 Mesh new_mesh_cube(float width, float height, float depth);
 Mesh new_mesh_grid(float width, float depth, int32_t subdivision_x, int32_t subdivision_y);
-Mesh new_mesh_triangle();
+Mesh new_mesh_triangle(void);
+
+void mesh_draw(Mesh *mesh);
 
 #endif //SUPERMARIO_GPU_H

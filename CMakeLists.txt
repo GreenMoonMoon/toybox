@@ -35,6 +35,11 @@ target_sources(toybox PRIVATE
         src/viewport.c
         src/inputs.c
         src/mesh.c
+        src/material.c
+        src/camera.c
+
+        src/io/file.c
+
         ${extern_SOURCES})
 target_include_directories(toybox PRIVATE src)
 target_link_libraries(toybox PRIVATE SDL2::SDL2main SDL2::SDL2-static)
