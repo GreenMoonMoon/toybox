@@ -11,6 +11,10 @@ void init_keyboard_inputs(void){
     keyboard_state = SDL_GetKeyboardState(NULL);
 }
 
+void clean_keyboard_inputs(void) {
+    keyboard_state = NULL;
+}
+
 int32_t key_binding_get_state(KeyBinding *binding){
     if(keyboard_state[binding->physical_key] == 0) binding->state = binding->state == BUTTON_STATE_JUST_RELEASED ? BUTTON_STATE_RELEASED : BUTTON_STATE_JUST_RELEASED;
     else binding->state = binding->state == BUTTON_STATE_JUST_PRESSED ? BUTTON_STATE_PRESSED : BUTTON_STATE_JUST_PRESSED;

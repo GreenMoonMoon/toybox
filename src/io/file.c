@@ -21,7 +21,8 @@ size_t read_file(const char* filename, char **buffer) {
     size_t file_size = get_file_size(filename);
 
     FILE *file;
-    fopen(file, filename, "r");
+//    fopen(file, filename, "r");
+    file = fopen(filename, "r");
     if(!file) return 0;
 
     *buffer = (char*)malloc(file_size + 1);

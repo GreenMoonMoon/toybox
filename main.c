@@ -69,7 +69,7 @@ int main(int argc, char *argv[]) {
 //        material_set_albedo(cube_material, &texture);
 //        draw_mesh(cube_mesh, GLM_MAT4_IDENTITY, debug_camera.transform, debug_camera.projection, cube_material);
 
-            mesh_draw_generic(cube, GLM_MAT4_IDENTITY, &debug_camera);
+//            mesh_draw_generic(cube, GLM_MAT4_IDENTITY, &debug_camera);
 
 //        material_set_heightmap(terrain_material, &heightmap);
 //        material_set_scale(terrain_material, 20.0f);
@@ -95,6 +95,9 @@ int main(int argc, char *argv[]) {
 
         mesh_unload(cube);
         mesh_delete(cube);
+
+        clean_default_shaders();
+        clean_keyboard_inputs();
 
         viewport_delete(viewport);
     }

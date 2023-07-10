@@ -36,12 +36,14 @@ target_sources(toybox PRIVATE
         src/inputs.c
         src/mesh.c
         src/shader.c
+        src/camera.c
+
+        src/io/file.c
+
 #        src/draw.c
 #        src/material.c
-#        src/io/file.c
 #        src/io/image.c
 #        src/node.c
-#        src/camera.c
 #        src/terrain.c
 #        src/texture.c
 #        src/ui.c

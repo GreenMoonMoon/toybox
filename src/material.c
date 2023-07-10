@@ -18,38 +18,6 @@ Material load_material_from_files(const char *vertex_source_file, const char *fr
     return result;
 }
 
-Material load_tesselation_material_from_files(const char *vertex_source_file,
-                                              const char *tess_control_source_file,
-                                              const char *tess_evaluation_source_file,
-                                              const char *fragment_source_file) {
-    char *vertex_source;
-    read_file(vertex_source_file, &vertex_source);
-    GLuint vertex_handle = compile_shader(vertex_source, GL_VERTEX_SHADER);
-    free(vertex_source);
-
-    char *tess_control_source;
-    read_file(tess_control_source_file, &tess_control_source);
-    GLuint tess_control_handle = compile_shader(tess_control_source, GL_TESS_CONTROL_SHADER);
-    FREE(tess_control_source);
-
-    char *tess_evaluation_source;
-    read_file(tess_evaluation_source_file, &tess_evaluation_source);
-    GLuint tess_evaluation_handle = compile_shader(tess_evaluation_source, GL_TESS_EVALUATION_SHADER);
-    FREE(tess_evaluation_source);
-
-    char *fragment_source;
-    read_file(fragment_source_file, &fragment_source);
-    GLuint fragment_handle = compile_shader(fragment_source, GL_FRAGMENT_SHADER);
-    FREE(fragment_source);
-
-    GLuint program_handle = build_program(4, vertex_handle, tess_control_handle, tess_evaluation_handle, fragment_handle);
-
-    Material result = {
-        .shader = setup_tesselation_shader(program_handle),
-    };
-    return result;
-}
-
 void material_enable(Material material) {
     glUseProgram(material.shader.handle);
 }

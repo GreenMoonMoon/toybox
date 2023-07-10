@@ -4,7 +4,6 @@
 
 #include "mesh.h"
 #include <string.h>
-#include <stdint.h>
 #include "camera.h"
 #include "shader.h"
 #include "types.h"
@@ -42,6 +41,11 @@ void mesh_load(Mesh mesh) {
     glCreateVertexArrays(1, &vao);
     glVertexArrayVertexBuffer(vao, 0, buffers[0], base_offset, mesh.data.vertex_size); // Bind a buffer to binding point 0
     glVertexArrayElementBuffer(vao, buffers[1]);
+
+    // FIXME: use an attribute object to manage non-conform vertex struct
+    mesh_set_vertex_attribute(mesh, 0, 3, 0);
+    mesh_set_vertex_attribute(mesh, 1, 3, sizeof(vec3));
+    mesh_set_vertex_attribute(mesh, 2, 2, sizeof(vec3) + sizeof(vec3));
 
     mesh.vao = vao;
     mesh.buffers[0] = buffers[0];

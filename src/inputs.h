@@ -23,6 +23,7 @@ typedef struct KeyBinding {
 } KeyBinding;
 
 void init_keyboard_inputs(void);
+void clean_keyboard_inputs(void);
 
 int32_t key_binding_get_state(KeyBinding *binding);
 

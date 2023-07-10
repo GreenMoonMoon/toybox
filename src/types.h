@@ -7,6 +7,7 @@
 
 #include <stdint.h>
 #include <stdbool.h>
+#include "cglm/cglm.h"
 
 typedef int8_t i8;
 typedef uint8_t u8;
