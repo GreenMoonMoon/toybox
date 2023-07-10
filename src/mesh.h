@@ -17,9 +17,9 @@ typedef struct Vertex {
 
 typedef struct Mesh {
   Vertex *vertices;
-  size_t vertex_count;
+  size_t vertices_count;
   uint32_t *indices;
-  int32_t index_count;
+  int32_t indices_count;
 
   uint32_t vao;
   uint32_t buffers[2];
@@ -28,7 +28,7 @@ typedef struct Mesh {
 uint32_t mesh_load_vertex_buffer(Mesh *mesh, const uint8_t *vertices, int32_t vertex_size, size_t vertex_count);
 
 /// Load a mesh on the GPU
-Mesh load_mesh(const Vertex *vertices, int32_t vertex_count, const uint32_t *indices, int32_t index_count);
+void mesh_load(Mesh *mesh);
 
 /// Set a vertex attribute by specifying at which layout location it is going to be accessed and the data offset from
 ///  the start of each vertex.
@@ -36,7 +36,7 @@ Mesh load_mesh(const Vertex *vertices, int32_t vertex_count, const uint32_t *ind
 /// \param attribute_index Index corresponding to the shader layout attribute
 /// \param attribute_dimension Attribute dimension. Between 1 and 4 (ex: vec3 is 3)
 /// \param offset Relative offset from the start of a vertex data structure
-void mesh_set_vertex_attribute(Mesh mesh, uint32_t attribute_index, int32_t attribute_dimension, int32_t offset);
+void mesh_set_vertex_attribute(Mesh *mesh, uint32_t attribute_index, int32_t attribute_dimension, int32_t offset);
 
 /// Unload a mesh from the gpu but doesn't delete the local data.
 void mesh_unload(Mesh mesh);
@@ -44,8 +44,9 @@ void mesh_unload(Mesh mesh);
 /// Unload a mesh from the GPU and delete local data
 void mesh_delete(Mesh mesh);
 
-Mesh create_quad_mesh(float width, float height);
-Mesh create_cube_mesh(float width, float height, float depth);
-Mesh create_grid_mesh(float width, float depth, int32_t subdivision_x, int32_t subdivision_y);
+Mesh new_mesh_quad(float width, float height);
+Mesh new_mesh_cube(float width, float height, float depth);
+Mesh new_mesh_grid(float width, float depth, int32_t subdivision_x, int32_t subdivision_y);
+Mesh new_mesh_triangle();
 
 #endif //SUPERMARIO_GPU_H

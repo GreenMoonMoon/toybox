@@ -16,7 +16,7 @@ struct Viewport {
   uint64_t last_frame_time;
 };
 
-void viewport_init(struct Viewport **viewport, uint32_t width, uint32_t height, const char *name) {
+Viewport *new_viewport(uint32_t width, uint32_t height, const char *name) {
     SDL_Init(SDL_INIT_VIDEO);
 
     SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
@@ -36,7 +36,9 @@ void viewport_init(struct Viewport **viewport, uint32_t width, uint32_t height, 
 
     // Check version
     int version = gladLoadGL((GLADloadfunc) SDL_GL_GetProcAddress);
-    printf("GL %d.%d\n", GLAD_VERSION_MAJOR(version), GLAD_VERSION_MINOR(version));
+#ifndef NDEBUG
+    printf("[DEBUG][OpenGL] %d.%d\n", GLAD_VERSION_MAJOR(version), GLAD_VERSION_MINOR(version));
+#endif
 
     SDL_GL_MakeCurrent(window, context);
 
@@ -49,11 +51,13 @@ void viewport_init(struct Viewport **viewport, uint32_t width, uint32_t height, 
     glEnable(GL_CULL_FACE);
     glCullFace(GL_BACK);
 
-    *viewport = MALLOC(sizeof(Viewport));
-    (*viewport)->window = window;
-    (*viewport)->context = context;
-    (*viewport)->closing = false;
-    (*viewport)->last_frame_time = SDL_GetPerformanceCounter();
+    Viewport *viewport = MALLOC(sizeof(Viewport));
+    viewport->window = window;
+    viewport->context = context;
+    viewport->closing = false;
+    viewport->last_frame_time = SDL_GetPerformanceCounter();
+
+    return viewport;
 }
 
 void viewport_delete(struct Viewport *viewport) {

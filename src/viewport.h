@@ -10,7 +10,7 @@
 
 typedef struct Viewport Viewport;
 
-void viewport_init(Viewport **viewport, uint32_t width, uint32_t height, const char *name);
+Viewport *new_viewport(uint32_t width, uint32_t height, const char *name);
 void viewport_delete(Viewport *viewport);
 
 bool viewport_is_closing(Viewport *viewport);
